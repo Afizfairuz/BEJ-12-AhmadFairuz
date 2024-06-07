@@ -7,3 +7,5 @@ class UserRepository {
     return this.users;
   }
 }
+
+module.exports = UserRepository;

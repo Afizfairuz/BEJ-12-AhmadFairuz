@@ -7,3 +7,6 @@ class UserHandler {
     return this.userService.getList();
   }
 }
+
+
+module.exports = UserHandler;
