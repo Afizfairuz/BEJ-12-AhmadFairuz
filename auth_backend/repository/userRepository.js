@@ -1,6 +1,6 @@
 class UserRepository {
-  constructor() {
-    this.users = [];
+  constructor(users) {
+    this.users = users
   }
 
   getList() {

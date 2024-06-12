@@ -1,54 +1,32 @@
 class ProductService {
-  constructor(productRepository) {
+  constructor(productRepository, userRepository) {
     this.productRepository = productRepository;
-  }
-
-  async createProduct(product) {
-    try {
-      const newProduct = await this.productRepository.addProduct(product);
-      return newProduct;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getList() {
-    try {
-      const productList = await this.productRepository.getList();
-      return productList;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getProductById(id) {
-    try {
-      const product = await this.productRepository.getProductById(id);
-      return product;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async updateProduct(id, updateData) {
-    try {
-      const updatedProduct = await this.productRepository.updateProduct(
-        id,
-        updateData
-      );
-      return updatedProduct;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async deleteProduct(id) {
-    try {
-      await this.productRepository.deleteProduct(id);
-    } catch (error) {
-      throw error;
-    }
+    this.userRepository = userRepository;
   }
 }
 
-module.exports = ProductService;
+createProduct(product) {
+  const user = this.userRepository.getUserByEmail(product.user_email);
+  if (!user) {
+    throw new Error('User not found');
+  }
+  this.productRepository.addProduct(product);
+  return product;
+}
+
+getAllProductsWithUser() {
+  const products = this.productRepository.getList();
+  return products.map(product => {
+    const user = this.userRepository.getUserByEmail(product.user_email);
+    return {
+      name: product.name,
+      price: product.price,
+      user: user ? {
+        name: user.name,
+        email: user.email
+      } : null
+    } ;
+  });
+}
+
+module.exsport = ProductService;
