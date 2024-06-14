@@ -17,6 +17,12 @@ const products = [
     user_email: "hanvir@gmail.com",
     category_code: "hp",
   },
+  {
+    name: "hp iphone",
+    price: 2000,
+    user_email: "fairuz@gmail.com",
+    category_code: "hp",
+  }
 ];
 
 // Repository untuk Product

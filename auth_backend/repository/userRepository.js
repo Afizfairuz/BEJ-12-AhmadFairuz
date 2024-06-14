@@ -9,6 +9,11 @@ const users = [
     email: "hanvir@gmail.com",
     password: "HanVir123",
   },
+  {
+    name: "fairuz",
+    email: "fairuz@gmail.com",
+    password: "fairuz123",
+  }
 ];
 
 // Repository untuk User

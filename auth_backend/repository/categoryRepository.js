@@ -6,10 +6,13 @@ const categories = [
   {
     code: "hp",
     name: "handphone",
+  },
+  {
+    code: "bk",
+    name: "buku",
   }
 ];
 
-// Repository untuk category
 class CategoryRepository {
   constructor() {
     this.categories = categories;
