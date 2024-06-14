@@ -1,60 +1,55 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
-
 const app = express();
+const PORT = 8000; // Port untuk berjalannya server
+
+// Mengimpor repository
+const UserRepository = require("./auth_backend/repository/UserRepository");
+const ProductRepository = require("./auth_backend/repository/ProductRepository");
+const CategoryRepository = require("./auth_backend/repository/CategoryRepository");
+
+// Mengimpor service
+const UserService = require("./auth_backend/service/UserService");
+const ProductService = require("./auth_backend/service/ProductService");
+const CategoryService = require("./auth_backend/service/CategoryService");
+
+// Mengimpor handler
+const UserHandler = require("./auth_backend/handler/UserHandler");
+const ProductHandler = require("./auth_backend/handler/ProductHandler");
+const CategoryHandler = require("./auth_backend/handler/CategoryHandler");
+
+// Middleware untuk parsing request body
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// array buat nyimpen pengguna
-const users = [];
+// Inisialisasi repository
+const userRepository = new UserRepository();
+const productRepository = new ProductRepository();
+const categoryRepository = new CategoryRepository();
 
-//  endpoint beranda halaman utama
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// Inisialisasi service
+const userService = new UserService(userRepository);
+const productService = new ProductService(productRepository, userRepository);
+const categoryService = new CategoryService(categoryRepository);
 
-// endpoint buat registrasi pengguna
-app.post("/register", async (req, res) => {
-  try {
-    const { username, password } = req.body;
+// Inisialisasi handler
+const userHandler = new UserHandler(userService);
+const productHandler = new ProductHandler(productService);
+const categoryHandler = new CategoryHandler(categoryService);
 
-    // validasi pengguna sudah terfatar atau belum
-    const existingUser = users.find((user) => user.username === username);
-    if (existingUser)
-      return res.status(400).json({ message: "Username already exists" });
+// Route untuk User
+app.get("/users", userHandler.getAll);
+app.get("/users/:email", userHandler.getByEmail);
+app.post("/register", userHandler.register);
+app.post("/login", userHandler.login);
 
-    // hash password buat menyimpan password
-    const hashedPassword = await bcrypt.hash(password, 10);
+// Route untuk Product
+app.get("/products", productHandler.getAll);
+app.post("/products", productHandler.create);
 
-    // menyimpan pengguna baru
-    users.push({ username, password: hashedPassword });
+// Route untuk Category
+app.get("/categories", categoryHandler.getAll);
+app.post("/categories", categoryHandler.create);
 
-    res.status(201).json({ message: "User registered successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-// endpoint login
-app.post("/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-
-    // mencari username dari pengguna
-    const user = users.find((user) => user.username === username);
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    // verfikasi password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: "Invalid password" });
-
-    res.status(200).json({ message: "Login successful" });
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-const PORT = process.env.PORT || 3000;
+// Menjalankan server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server berjalan pada http://localhost:${PORT}`);
 });
