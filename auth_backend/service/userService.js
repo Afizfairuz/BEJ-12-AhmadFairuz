@@ -1,50 +1,23 @@
+// Service untuk User
 class UserService {
   constructor(userRepository) {
     this.userRepository = userRepository;
   }
 
-  async createUser(user) {
-    try {
-      const newUser = await this.userRepository.addUser(user);
-      return newUser;
-    } catch (error) {
-      throw error;
-    }
+  // Mendapatkan semua pengguna
+  getAll() {
+    return this.userRepository.getAll();
   }
 
-  async getList() {
-    try {
-      const userList = await this.userRepository.getList();
-      return userList;
-    } catch (error) {
-      throw error;
-    }
+  // Mendapatkan pengguna berdasarkan email
+  getByEmail(email) {
+    const user = this.userRepository.getByEmail(email);
+    return user || null;
   }
 
-  async getUserById(id) {
-    try {
-      const user = await this.userRepository.getUserById(id);
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async updateUser(id, updateData) {
-    try {
-      const updatedUser = await this.userRepository.updateUser(id, updateData);
-      return updatedUser;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async deleteUser(id) {
-    try {
-      await this.userRepository.deleteUser(id);
-    } catch (error) {
-      throw error;
-    }
+  // Mendaftarkan pengguna baru
+  register(user) {
+    return this.userRepository.addUser(user);
   }
 }
 

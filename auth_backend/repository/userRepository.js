@@ -1,29 +1,36 @@
+const users = [
+  {
+    name: "Adit",
+    email: "adit@gmail.com",
+    password: "Adit123",
+  },
+  {
+    name: "han vir",
+    email: "hanvir@gmail.com",
+    password: "HanVir123",
+  },
+];
+
+// Repository untuk User
 class UserRepository {
-  constructor(users) {
-    this.users = users
+  constructor() {
+    this.users = users;
   }
 
-  getList() {
+  // Mendapatkan semua pengguna
+  getAll() {
     return this.users;
   }
 
+  // Mendapatkan pengguna berdasarkan email
+  getByEmail(email) {
+    return this.users.find((user) => user.email === email);
+  }
+
+  // Menambahkan pengguna baru
   addUser(user) {
     this.users.push(user);
-  }
-
-  getUserById(id) {
-    return this.users.find((user) => user.id === id);
-  }
-
-  updateUser(id, updateData) {
-    const index = this.users.findIndex((user) => user.id === id);
-    if (index !== -1) {
-      this.users[index] = { ...this.users[index], ...updateData };
-    }
-  }
-
-  deleteUser(id) {
-    this.users = this.users.filter((user) => user.id !== id);
+    return user;
   }
 }
 
