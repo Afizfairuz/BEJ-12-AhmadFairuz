@@ -1,8 +1,22 @@
 class ProductService {
-  constructor(productRepository) {
+  constructor(productRepository, userRepository) {
     this.productRepository = productRepository;
+    this.userRepository = userRepository;
   }
+
+  // Mendapatkan semua produk
   getAll() {
-    //mengembalikan 
+    return this.productRepository.getAll();
+  }
+
+  // Menambahkan produk baru
+  create(product) {
+    const user = this.userRepository.getByEmail(product.user_email);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return this.productRepository.insert(product);
   }
 }
+
+module.exports = ProductService;

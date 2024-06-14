@@ -1,29 +1,39 @@
+const products = [
+  {
+    name: "laptop macbook",
+    price: 1234124,
+    user_email: "adit@gmail.com",
+    category_code: "lp",
+  },
+  {
+    name: "laptop windows",
+    price: 1234124,
+    user_email: "hanvir@gmail.com",
+    category_code: "lp",
+  },
+  {
+    name: "hp samsung",
+    price: 1234124,
+    user_email: "hanvir@gmail.com",
+    category_code: "hp",
+  },
+];
+
+// Repository untuk Product
 class ProductRepository {
   constructor() {
-    this.products = [];
+    this.products = products;
   }
 
-  getList() {
+  // Mendapatkan semua produk
+  getAll() {
     return this.products;
   }
 
-  addProduct(product) {
+  // Menambahkan produk baru
+  insert(product) {
     this.products.push(product);
-  }
-
-  getProductById(id) {
-    return this.products.find((product) => product.id === id);
-  }
-
-  updateProduct(id, updateData) {
-    const index = this.products.findIndex((product) => product.id === id);
-    if (index !== -1) {
-      this.products[index] = { ...this.products[index], ...updateData };
-    }
-  }
-
-  deleteProduct(id) {
-    this.products = this.products.filter((product) => product.id !== id);
+    return product;
   }
 }
 
