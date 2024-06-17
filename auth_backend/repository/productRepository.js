@@ -22,7 +22,7 @@ const products = [
     price: 2000,
     user_email: "fairuz@gmail.com",
     category_code: "hp",
-  }
+  },
 ];
 
 // Repository untuk Product
