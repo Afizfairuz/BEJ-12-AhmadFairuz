@@ -1,21 +1,24 @@
 const express = require("express");
 const app = express();
-const PORT = 8000; // Port untuk berjalannya server
+const PORT = 8000;
 
 // Mengimpor repository
 const UserRepository = require("./auth_backend/repository/UserRepository");
 const ProductRepository = require("./auth_backend/repository/ProductRepository");
 const CategoryRepository = require("./auth_backend/repository/CategoryRepository");
+const OrderRepository = require("./auth_backend/repository/OrderRepository"); 
 
 // Mengimpor service
 const UserService = require("./auth_backend/service/UserService");
 const ProductService = require("./auth_backend/service/ProductService");
 const CategoryService = require("./auth_backend/service/CategoryService");
+const OrderService = require("./auth_backend/service/OrderService"); 
 
 // Mengimpor handler
 const UserHandler = require("./auth_backend/handler/UserHandler");
 const ProductHandler = require("./auth_backend/handler/ProductHandler");
 const CategoryHandler = require("./auth_backend/handler/CategoryHandler");
+const OrderHandler = require("./auth_backend/handler/OrderHandler"); 
 
 // Middleware untuk parsing request body
 app.use(express.json());
@@ -26,17 +29,6 @@ const logger = (req, res, next) => {
   next();
 };
 app.use(logger);
-
-// Middleware untuk autentikasi
-const authenticate = (req, res, next) => {
-  const token = req.headers.authorization;
-  if (token) {
-    next();
-  } else {
-    res.status(401).send("Unauthorized");
-  }
-};
-app.use(authenticate);
 
 // Middleware untuk menangani error internal server
 const internalServerErrorHandler = (err, req, res, next) => {
@@ -52,16 +44,19 @@ app.use(internalServerErrorHandler);
 const userRepository = new UserRepository();
 const productRepository = new ProductRepository();
 const categoryRepository = new CategoryRepository();
+const orderRepository = new OrderRepository(); 
 
 // Inisialisasi service
 const userService = new UserService(userRepository);
 const productService = new ProductService(productRepository, userRepository);
 const categoryService = new CategoryService(categoryRepository);
+const orderService = new OrderService(orderRepository); 
 
 // Inisialisasi handler
 const userHandler = new UserHandler(userService);
 const productHandler = new ProductHandler(productService);
 const categoryHandler = new CategoryHandler(categoryService);
+const orderHandler = new OrderHandler(orderService); 
 
 // Route untuk User
 app.get("/users", userHandler.getAll);
@@ -76,6 +71,12 @@ app.post("/products", productHandler.create);
 // Route untuk Category
 app.get("/categories", categoryHandler.getAll);
 app.post("/categories", categoryHandler.create);
+
+// Route untuk Order
+app.get("/orders", orderHandler.getAll);
+app.get("/orders/:id", orderHandler.getById);
+app.post("/orders", orderHandler.create);
+app.delete("/orders/:id", orderHandler.deleteById);
 
 // Menjalankan server
 app.listen(PORT, () => {
