@@ -20,6 +20,34 @@ const CategoryHandler = require("./auth_backend/handler/CategoryHandler");
 // Middleware untuk parsing request body
 app.use(express.json());
 
+// Middleware untuk logging
+const logger = (req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+};
+app.use(logger);
+
+// Middleware untuk autentikasi
+const authenticate = (req, res, next) => {
+  const token = req.headers.authorization;
+  if (token) {
+    next();
+  } else {
+    res.status(401).send("Unauthorized");
+  }
+};
+app.use(authenticate);
+
+// Middleware untuk menangani error internal server
+const internalServerErrorHandler = (err, req, res, next) => {
+  console.log("error: ", err);
+  res.status(500).send({
+    status: "fail",
+    message: err.message,
+  });
+};
+app.use(internalServerErrorHandler);
+
 // Inisialisasi repository
 const userRepository = new UserRepository();
 const productRepository = new ProductRepository();
