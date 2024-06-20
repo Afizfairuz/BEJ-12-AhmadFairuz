@@ -2,14 +2,14 @@ Table users {
   id integer [primary key]
   full_name varchar
   email varchar
-  password varchar
+  password text
   created_at datetime
 }
 
 Table products {
   id integer [primary key]
   name varchar
-  price int
+  price float
   status varchar
   created_at datetime
   category_id int [ref: > categories.id]
@@ -35,6 +35,6 @@ Ref: orders.user_id > users.id
 
 
 //Penjelasan relasi ERD
-products.category_id > categories.id: Setiap produk terhubung dengan satu kategori berdasarkan category_id.
-products.user_id > users.id: Setiap produk terhubung dengan pengguna yang membuatnya berdasarkan user_id.
-orders.user_id > users.id: Setiap pesanan terhubung dengan pengguna yang melakukan pesanan berdasarkan user_id.
+Ref: products.category_id > categories.id: Setiap produk (products) terhubung dengan satu kategori (categories) yang ditunjukkan oleh category_id.
+Ref: products.user_id > users.id: Setiap produk (products) memiliki informasi tentang pengguna (users) yang membuat produk tersebut, yang ditunjukkan oleh user_id.
+Ref: orders.user_id > users.id: Setiap pesanan (orders) terhubung dengan pengguna (users) yang melakukan pesanan tersebut, yang ditunjukkan oleh user_id.
