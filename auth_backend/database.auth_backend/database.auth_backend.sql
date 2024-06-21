@@ -1,0 +1,33 @@
+CREATE TABLE users (
+	id SERIAL PRIMARY KEY,
+	full_name VARCHAR(100),
+	email VARCHAR(100),
+	password TEXT,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE products (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(100),
+	price FLOAT,
+	status VARCHAR(100),
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	category_id INT,
+	user_id INT
+);
+
+
+CREATE TABLE categories (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(100),
+	code VARCHAR(100)
+);
+
+
+CREATE TABLE orders (
+	id SERIAL PRIMARY KEY,
+	user_id INT,
+	status VARCHAR(100),
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
