@@ -9,10 +9,10 @@ class ProductRepository {
     return getProducts;
   }
 
-  // Menambahkan produk baru
-  insert(product) {
-    this.products.push(product);
-    return product;
+  async insert(product) {
+    const createdProduct = await pgConn`
+    insert into products (name, price) values (${product.name}, ${product.price})`;
+    return createdProduct;
   }
 }
 

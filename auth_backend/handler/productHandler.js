@@ -14,17 +14,17 @@ class ProductHandler {
     });
   }
 
-  // Menambahkan produk baru
-  create(req, res) {
-    const newProduct = req.body;
-    try {
-      const product = this.productService.create(newProduct);
-      res
-        .status(201)
-        .json({ message: "Product created successfully", product });
-    } catch (error) {
-      res.status(400).json({ message: error.message });
-    }
+  async create(req, res) {
+    const productToCreate = req.body;
+    const createdProduct = await this.productService.create(productToCreate);
+
+    res.status(201).send({
+      created_product: createdProduct
+    })
+  }
+
+  updateById(req, res) {
+    const productId = req.params.id;
   }
 }
 

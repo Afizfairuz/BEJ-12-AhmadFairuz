@@ -9,13 +9,12 @@ class ProductService {
     return products;
   }
 
-  // Menambahkan produk baru
-  create(product) {
-    const user = this.userRepository.getByEmail(product.user_email);
+  async create(product) {
+    const user = await this.userRepository.getByEmail(product.user_email);
     if (!user) {
       throw new Error("User not found");
     }
-    return this.productRepository.insert(product);
+    return await this.productRepository.insert(product);
   }
 }
 
