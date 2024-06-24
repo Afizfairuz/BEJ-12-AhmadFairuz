@@ -4,9 +4,9 @@ class ProductService {
     this.userRepository = userRepository;
   }
 
-  // Mendapatkan semua produk
-  getAll() {
-    return this.productRepository.getAll();
+  async getAll() {
+    const products = await this.productRepository.getAll();
+    return products;
   }
 
   // Menambahkan produk baru

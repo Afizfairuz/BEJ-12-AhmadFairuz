@@ -1,4 +1,3 @@
-// Service untuk User
 class UserService {
   constructor(userRepository) {
     this.userRepository = userRepository;

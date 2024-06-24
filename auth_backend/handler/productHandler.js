@@ -2,15 +2,16 @@ class ProductHandler {
   constructor(productService) {
     this.productService = productService;
 
-    // Binding fungsi ke instance ini
+    // Binding
     this.getAll = this.getAll.bind(this);
     this.create = this.create.bind(this);
   }
 
-  // Mendapatkan semua produk
-  getAll(req, res) {
-    const products = this.productService.getAll();
-    res.status(200).json({ products });
+  async getAll(req, res) {
+    const products = await this.productService.getAll();
+    res.status(200).send({
+      products: products
+    });
   }
 
   // Menambahkan produk baru
