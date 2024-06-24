@@ -34,6 +34,13 @@ class UserRepository {
 
   // Menambahkan pengguna baru
   addUser(user) {
+    // Cek jika email sudah ada
+    const existingUser = this.getByEmail(user.email);
+    if (existingUser) {
+      throw new Error("User with this email already exists");
+    }
+
+    // Jika tidak ada, tambahkan pengguna baru
     this.users.push(user);
     return user;
   }

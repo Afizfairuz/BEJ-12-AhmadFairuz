@@ -79,10 +79,23 @@ app.get("/orders/:id", orderHandler.getById);
 app.post("/orders", orderHandler.create);
 app.delete("/orders/:id", orderHandler.deleteById);
 
+
 // Endpoint untuk menampilkan gambar
 app.get("/images/binar.png", (req, res) => {
   res.sendFile(path.join(__dirname, "assets", "binar.png"));
 });
+
+// Menambahkan pengguna baru
+app.post('/users', (req, res) => {
+  const user = req.body;
+  try {
+    const newUser = userRepository.addUser(user);
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
 
 // Menjalankan server
 app.listen(PORT, () => {
