@@ -1,50 +1,50 @@
+const pgConn = require("../config/postgres");
 const orders = [
-    {
-        id: 1, 
-        user_email: "ahmad@2gmail.com",
-        products: [
-            { name: "sepatu mizuno", price: 3000, category_code: "mzn"},
-        ],
-        total: 3000,
-        status: "completed",
-    },
-    {
-        id: 2, 
-        user_email: "fairuz@gmail.com",
-        products: [
-            { name: "hp iphone 20", price: 2000, category_code: "ip20"},
-        ],
-        total: 2000,
-        status: "pending"
-    },
+  {
+    id: 1,
+    user_email: "ahmad@2gmail.com",
+    products: [{ name: "sepatu mizuno", price: 3000, category_code: "mzn" }],
+    total: 3000,
+    status: "completed",
+  },
+  {
+    id: 2,
+    user_email: "fairuz@gmail.com",
+    products: [{ name: "hp iphone 20", price: 2000, category_code: "ip20" }],
+    total: 2000,
+    status: "pending",
+  },
 ];
 
 class OrderRepository {
-    constructor() {
-        this.orders = orders;
-    }
+  constructor() {}
 
-    getAll() {
-        return this.orders;
-    }
+  async getAll() {
+    const getOrders =
+      await pgConn`SELECT id, user_email, products, total, status FROM orders`;
+    return getOrders;
+  }
 
-    getById(id) {
-        return this.orders.find(order => order.id === id);
-    }
+  async getById(id) {
+    const getOrder =
+      await pgConn`SELECT id, user_email, products, total, status FROM orders WHERE id = ${id}`;
+    return getOrder[0]; 
+  }
 
-    addOrder(order) {
-        this.orders.push(order);
-        return order;
-    }
+  async addOrder(order) {
+    const { user_email, products, total, status } = order;
+    const addedOrder = await pgConn`
+      INSERT INTO orders (user_email, products, total, status)
+      VALUES (${user_email}, ${products}, ${total}, ${status})
+      RETURNING id, user_email, products, total, status`;
+    return addedOrder[0]; 
+  }
 
-    deleteById(id) {
-        const index = this.orders.findIndex(order => order.id === id);
-        if (index !== 1) {
-            this.orders.splice(index, 1);
-            return true;
-        }
-        return false;
-    }
+  async deleteById(id) {
+    const deletedOrder = await pgConn`
+      DELETE FROM orders WHERE id = ${id} RETURNING id, user_email, products, total, status`;
+    return deletedOrder[0]; 
+  }
 }
 
 module.exports = OrderRepository;

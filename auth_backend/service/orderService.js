@@ -1,22 +1,42 @@
 class OrderService {
-  constructor(orderRepository) {
-    this.orderRepository = orderRepository;
+  constructor() {
+    this.orderRepository = new OrderRepository();
   }
 
-  getAllOrders() {
-    return this.orderRepository.getAll();
+  async getAllOrders() {
+    try {
+      return await this.orderRepository.getAll();
+    } catch (error) {
+      throw new Error(`Error while fetching orders: ${error.message}`);
+    }
   }
 
-  getOrderById(id) {
-    return this.orderRepository.getById(id); 
+  async getOrderById(id) {
+    try {
+      return await this.orderRepository.getById(id);
+    } catch (error) {
+      throw new Error(
+        `Error while fetching order with id ${id}: ${error.message}`
+      );
+    }
   }
 
-  createOrder(order) {
-    return this.orderRepository.addOrder(order);
+  async addOrder(order) {
+    try {
+      return await this.orderRepository.addOrder(order);
+    } catch (error) {
+      throw new Error(`Error while adding order: ${error.message}`);
+    }
   }
 
-  deleteOrderById(id) {
-    return this.orderRepository.deleteById(id);
+  async deleteOrderById(id) {
+    try {
+      return await this.orderRepository.deleteById(id);
+    } catch (error) {
+      throw new Error(
+        `Error while deleting order with id ${id}: ${error.message}`
+      );
+    }
   }
 }
 
