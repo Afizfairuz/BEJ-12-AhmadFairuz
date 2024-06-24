@@ -3,20 +3,33 @@ class UserService {
     this.userRepository = userRepository;
   }
 
-  // Mendapatkan semua pengguna
-  getAll() {
-    return this.userRepository.getAll();
+  async getAllUsers() {
+    try {
+      return await this.userRepository.getAll();
+    } catch (error) {
+      throw new Error(`Error while fetching users: ${error.message}`);
+    }
   }
 
-  // Mendapatkan pengguna berdasarkan email
-  getByEmail(email) {
-    const user = this.userRepository.getByEmail(email);
-    return user || null;
+  async registerUser(user) {
+    try {
+      return await this.userRepository.addUser(user);
+    } catch (error) {
+      throw new Error(`Error while registering user: ${error.message}`);
+    }
   }
 
-  // Mendaftarkan pengguna baru
-  register(user) {
-    return this.userRepository.addUser(user);
+  async login(email, password) {
+    try {
+      const user = await this.userRepository.getByEmail(email);
+      if (user && user.password === password) {
+        return true; // Login successful
+      } else {
+        return false; // Invalid email or password
+      }
+    } catch (error) {
+      throw new Error(`Error while logging in: ${error.message}`);
+    }
   }
 }
 

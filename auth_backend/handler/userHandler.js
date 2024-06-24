@@ -2,44 +2,62 @@ class UserHandler {
   constructor(userService) {
     this.userService = userService;
 
-    // Binding fungsi ke instance ini
+    // Binding methods
     this.getAll = this.getAll.bind(this);
     this.getByEmail = this.getByEmail.bind(this);
     this.register = this.register.bind(this);
     this.login = this.login.bind(this);
   }
 
-  // Mendapatkan semua pengguna
-  getAll(req, res) {
-    const users = this.userService.getAll();
-    res.status(200).json({ users });
-  }
-
-  // Mendapatkan pengguna berdasarkan email
-  getByEmail(req, res) {
-    const user = this.userService.getByEmail(req.params.email);
-    if (user) {
-      res.status(200).json({ user });
-    } else {
-      res.status(404).json({ message: "User not found" });
+  async getAll(req, res) {
+    try {
+      const users = await this.userService.getAllUsers();
+      res.status(200).json({ users });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   }
 
-  // Mendaftarkan pengguna baru
-  register(req, res) {
-    const newUser = req.body;
-    const user = this.userService.register(newUser);
-    res.status(201).json({ message: "User registered successfully", user });
+  async getByEmail(req, res) {
+    const email = req.params.email;
+    try {
+      const user = await this.userService.getUserByEmail(email);
+      if (user) {
+        res.status(200).json({ user });
+      } else {
+        res.status(404).json({ message: "User not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 
-  // Login pengguna
-  login(req, res) {
+  async register(req, res) {
+    const newUser = req.body;
+    try {
+      const registeredUser = await this.userService.registerUser(newUser);
+      res
+        .status(201)
+        .json({
+          message: "User registered successfully",
+          user: registeredUser,
+        });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async login(req, res) {
     const { email, password } = req.body;
-    const user = this.userService.getByEmail(email);
-    if (user && user.password === password) {
-      res.status(200).json({ message: "Login successful" });
-    } else {
-      res.status(401).json({ message: "Invalid email or password" });
+    try {
+      const loginSuccess = await this.userService.login(email, password);
+      if (loginSuccess) {
+        res.status(200).json({ message: "Login successful" });
+      } else {
+        res.status(401).json({ message: "Invalid email or password" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   }
 }
