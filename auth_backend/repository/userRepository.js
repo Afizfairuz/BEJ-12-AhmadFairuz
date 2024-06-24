@@ -13,7 +13,7 @@ const users = [
     name: "fairuz",
     email: "fairuz@gmail.com",
     password: "fairuz123",
-  }
+  },
 ];
 
 // Repository untuk User
