@@ -2,24 +2,35 @@ class CategoryHandler {
   constructor(categoryService) {
     this.categoryService = categoryService;
 
-    // Binding 
+    // Bind methods
     this.getAll = this.getAll.bind(this);
     this.create = this.create.bind(this);
   }
 
-  // Mendapatkan semua kategori
-  getAll(req, res) {
-    const categories = this.categoryService.getAll();
-    res.status(200).json({ categories });
+  async getAll(req, res) {
+    try {
+      const categories = await this.categoryService.getAllCategories();
+      res.status(200).json({ categories });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 
-  // Menambahkan kategori yang baru
-  create(req, res) {
+  async create(req, res) {
     const newCategory = req.body;
-    const category = this.categoryService.create(newCategory);
-    res
-      .status(201)
-      .json({ message: "Category created successfully", category });
+    try {
+      const createdCategory = await this.categoryService.createCategory(
+        newCategory
+      );
+      res
+        .status(201)
+        .json({
+          message: "Category created successfully",
+          category: createdCategory,
+        });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 }
 

@@ -1,3 +1,4 @@
+const pgConn = require("../config/postgres");
 const categories = [
   {
     code: "lp",
@@ -10,23 +11,22 @@ const categories = [
   {
     code: "bk",
     name: "buku",
-  }
+  },
 ];
 
 class CategoryRepository {
-  constructor() {
-    this.categories = categories;
+  constructor() {}
+
+  async getAll() {
+    const getCategories = await pgConn.query('SELECT code, name FROM categories');
+    return getCategories.rows;
   }
 
-  // Untuk mendapatkan semua category
-  getAll() {
-    return this.categories;
-  }
-
-  // Buat menambahkan category baru
-  insert(category) {
-    this.categories.push(category);
-    return category;
+  async insert(category) {
+    const { code, name } = category;
+    const insertQuery = 'INSERT INTO categories (code, name) VALUES ($1, $2) RETURNING code, name';
+    const createdCategory = await pgConn.query(insertQuery, [code, name]);
+    return createdCategory.rows[0];
   }
 }
 

@@ -1,18 +1,23 @@
 class CategoryService {
-  constructor(categoryRepository) {
-    this.categoryRepository = categoryRepository;
+  constructor() {
+    this.categoryRepository = new CategoryRepository();
   }
 
-  // Untuk mendapatkan semua kategori
-  getAll() {
-    return this.categoryRepository.getAll();
+  async getAllCategories() {
+    try {
+      return await this.categoryRepository.getAll();
+    } catch (error) {
+      throw new Error(`Error while fetching categories: ${error.message}`);
+    }
   }
 
-  //Menambahkan category yang baru
-  create(category) {
-    return this.categoryRepository.insert(category);
+  async createCategory(category) {
+    try {
+      return await this.categoryRepository.insert(category);
+    } catch (error) {
+      throw new Error(`Error while creating category: ${error.message}`);
+    }
   }
 }
 
 module.exports = CategoryService;
-
