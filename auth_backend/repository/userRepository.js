@@ -40,19 +40,18 @@ class UserRepository {
 
  async addUser(user) {
     try {
-      // Cek jika email sudah ada
+      
       const existingUser = await this.getByEmail(user.email);
       if (existingUser) {
         throw new Error("User with this email already exists");
       }
 
-      // Jika tidak ada, tambahkan pengguna baru
       const { name, email, password } = user;
       const newUser = await pgConn.query(
         'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING name, email',
         [name, email, password]
       );
-      return newUser.rows[0]; // Mengembalikan pengguna baru yang ditambahkan
+      return newUser.rows[0]; 
     } catch (error) {
       throw new Error(`Error while adding user: ${error.message}`);
     }

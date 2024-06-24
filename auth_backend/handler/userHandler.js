@@ -2,7 +2,7 @@ class UserHandler {
   constructor(userService) {
     this.userService = userService;
 
-    // Binding methods
+    // Binding 
     this.getAll = this.getAll.bind(this);
     this.getByEmail = this.getByEmail.bind(this);
     this.register = this.register.bind(this);
