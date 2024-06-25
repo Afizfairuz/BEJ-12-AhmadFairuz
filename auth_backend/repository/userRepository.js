@@ -21,26 +21,28 @@ class UserRepository {
   constructor() {}
 
   async getAll() {
-    try{
-      const getUsers = await pgConn.query('SELECT name, email FROM users');
+    try {
+      const getUsers = await pgConn.query("SELECT name, email FROM users");
       return getUsers.rows;
     } catch (error) {
-      throw new Error('Error while fetching users: ${error.message}');
+      throw new Error("Error while fetching users: ${error.message}");
     }
   }
 
   async getByEmail(email) {
     try {
-      const getUser = await pgConn.query('SELECT * FROM users WHERE email = $1', [email]);
+      const getUser = await pgConn.query(
+        "SELECT * FROM users WHERE email = $1",
+        [email]
+      );
       return getUser.rows[0];
     } catch (error) {
-      throw new Error('Error while fetching user: ${error.message}');
+      throw new Error("Error while fetching user: ${error.message}");
     }
   }
 
- async addUser(user) {
+  async addUser(user) {
     try {
-      
       const existingUser = await this.getByEmail(user.email);
       if (existingUser) {
         throw new Error("User with this email already exists");
@@ -48,15 +50,14 @@ class UserRepository {
 
       const { name, email, password } = user;
       const newUser = await pgConn.query(
-        'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING name, email',
+        "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING name, email",
         [name, email, password]
       );
-      return newUser.rows[0]; 
+      return newUser.rows[0];
     } catch (error) {
       throw new Error(`Error while adding user: ${error.message}`);
     }
   }
 }
-    
 
 module.exports = UserRepository;

@@ -28,7 +28,7 @@ class OrderRepository {
   async getById(id) {
     const getOrder =
       await pgConn`SELECT id, user_email, products, total, status FROM orders WHERE id = ${id}`;
-    return getOrder[0]; 
+    return getOrder[0];
   }
 
   async addOrder(order) {
@@ -37,13 +37,13 @@ class OrderRepository {
       INSERT INTO orders (user_email, products, total, status)
       VALUES (${user_email}, ${products}, ${total}, ${status})
       RETURNING id, user_email, products, total, status`;
-    return addedOrder[0]; 
+    return addedOrder[0];
   }
 
   async deleteById(id) {
     const deletedOrder = await pgConn`
       DELETE FROM orders WHERE id = ${id} RETURNING id, user_email, products, total, status`;
-    return deletedOrder[0]; 
+    return deletedOrder[0];
   }
 }
 

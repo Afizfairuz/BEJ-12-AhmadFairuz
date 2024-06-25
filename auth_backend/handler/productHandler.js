@@ -10,7 +10,7 @@ class ProductHandler {
   async getAll(req, res) {
     const products = await this.productService.getAll();
     res.status(200).send({
-      products: products
+      products: products,
     });
   }
 
@@ -19,8 +19,8 @@ class ProductHandler {
     const createdProduct = await this.productService.create(productToCreate);
 
     res.status(201).send({
-      created_product: createdProduct
-    })
+      created_product: createdProduct,
+    });
   }
 
   updateById(req, res) {

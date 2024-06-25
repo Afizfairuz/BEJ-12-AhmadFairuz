@@ -1,8 +1,7 @@
-const pgConn = require('../config/postgres')
-  
+const pgConn = require("../config/postgres");
 
 class ProductRepository {
-  constructor() { }
+  constructor() {}
 
   async getAll() {
     const getProducts = await pgConn`select id, name, price, from products`;

@@ -1,6 +1,6 @@
 const express = require("express");
-const app = express();
 const path = require("path");
+const app = express();
 const PORT = 8000;
 
 // Mengimpor repository
@@ -33,10 +33,10 @@ app.use(logger);
 
 // Middleware untuk menangani error internal server
 const internalServerErrorHandler = (err, req, res, next) => {
-  console.log("error: ", err);
-  res.status(500).send({
-    status: "fail",
-    message: err.message,
+  console.error("Internal server error:", err.stack);
+  res.status(500).json({
+    status: "error",
+    message: "Internal Server Error",
   });
 };
 app.use(internalServerErrorHandler);
@@ -76,26 +76,13 @@ app.post("/categories", categoryHandler.create);
 // Route untuk Order
 app.get("/orders", orderHandler.getAll);
 app.get("/orders/:id", orderHandler.getById);
-app.post("/orders", orderHandler.create);
-app.delete("/orders/:id", orderHandler.deleteById);
+app.post("/orders", orderHandler.addOrder);
+app.delete("/orders/:id", orderHandler.deleteOrderById);
 
-
-// Endpoint untuk menampilkan gambar
+// Endpoint untuk menyajikan gambar
 app.get("/images/binar.png", (req, res) => {
   res.sendFile(path.join(__dirname, "assets", "binar.png"));
 });
-
-// Menambahkan pengguna baru
-app.post('/users', (req, res) => {
-  const user = req.body;
-  try {
-    const newUser = userRepository.addUser(user);
-    res.status(201).json(newUser);
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-});
-
 
 // Menjalankan server
 app.listen(PORT, () => {

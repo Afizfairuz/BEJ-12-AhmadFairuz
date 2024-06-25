@@ -1,6 +1,6 @@
 class CategoryService {
-  constructor() {
-    this.categoryRepository = new CategoryRepository();
+  constructor(categoryRepository) {
+    this.categoryRepository = categoryRepository;
   }
 
   async getAllCategories() {

@@ -1,6 +1,6 @@
 class OrderService {
-  constructor() {
-    this.orderRepository = new OrderRepository();
+  constructor(orderRepository) {
+    this.orderRepository = orderRepository || new OrderRepository();
   }
 
   async getAllOrders() {

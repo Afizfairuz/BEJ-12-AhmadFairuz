@@ -2,7 +2,7 @@ class UserHandler {
   constructor(userService) {
     this.userService = userService;
 
-    // Binding 
+    // Binding
     this.getAll = this.getAll.bind(this);
     this.getByEmail = this.getByEmail.bind(this);
     this.register = this.register.bind(this);
@@ -36,12 +36,10 @@ class UserHandler {
     const newUser = req.body;
     try {
       const registeredUser = await this.userService.registerUser(newUser);
-      res
-        .status(201)
-        .json({
-          message: "User registered successfully",
-          user: registeredUser,
-        });
+      res.status(201).json({
+        message: "User registered successfully",
+        user: registeredUser,
+      });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

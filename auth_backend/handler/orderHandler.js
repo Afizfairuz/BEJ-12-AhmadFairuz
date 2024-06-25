@@ -1,6 +1,6 @@
 class OrderHandler {
-  constructor() {
-    this.orderService = new OrderService();
+  constructor(orderService) {
+    this.orderService = orderService || new OrderService();
 
     // Binding methods
     this.getAll = this.getAll.bind(this);

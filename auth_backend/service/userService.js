@@ -23,9 +23,9 @@ class UserService {
     try {
       const user = await this.userRepository.getByEmail(email);
       if (user && user.password === password) {
-        return true; 
+        return true;
       } else {
-        return false; 
+        return false;
       }
     } catch (error) {
       throw new Error(`Error while logging in: ${error.message}`);

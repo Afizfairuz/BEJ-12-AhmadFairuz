@@ -22,12 +22,10 @@ class CategoryHandler {
       const createdCategory = await this.categoryService.createCategory(
         newCategory
       );
-      res
-        .status(201)
-        .json({
-          message: "Category created successfully",
-          category: createdCategory,
-        });
+      res.status(201).json({
+        message: "Category created successfully",
+        category: createdCategory,
+      });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
