@@ -9,6 +9,7 @@ class ProductHandler {
 
   async getAll(req, res) {
     const products = await this.productService.getAll();
+
     res.status(200).send({
       products: products,
     });
