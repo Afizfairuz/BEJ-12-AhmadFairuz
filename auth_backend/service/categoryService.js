@@ -1,22 +1,34 @@
+// categoryService.js
+
 class CategoryService {
   constructor(categoryRepository) {
     this.categoryRepository = categoryRepository;
   }
 
   async getAllCategories() {
-    try {
-      return await this.categoryRepository.getAll();
-    } catch (error) {
-      throw new Error(`Error while fetching categories: ${error.message}`);
-    }
+    return this.categoryRepository.getAll();
   }
 
-  async createCategory(category) {
-    try {
-      return await this.categoryRepository.insert(category);
-    } catch (error) {
-      throw new Error(`Error while creating category: ${error.message}`);
-    }
+  async getCategoryById(id) {
+    return this.categoryRepository.getById(id);
+  }
+
+  async createCategory(name) {
+    const newCategory = {
+      name: name,
+    };
+    return this.categoryRepository.insert(newCategory);
+  }
+
+  async updateCategoryById(id, name) {
+    const updates = {
+      name: name,
+    };
+    return this.categoryRepository.updateById(id, updates);
+  }
+
+  async deleteCategoryById(id) {
+    return this.categoryRepository.deleteById(id);
   }
 }
 

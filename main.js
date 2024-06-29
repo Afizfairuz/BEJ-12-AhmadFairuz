@@ -68,11 +68,16 @@ app.post("/login", (req, res) => userHandler.login(req, res));
 // Route untuk Product
 app.get("/products", (req, res) => productHandler.getAll(req, res));
 app.post("/products", (req, res) => productHandler.create(req, res));
-app.put("/products/:id", (req, res) => productHandler.updateById(req, res)); // Tambahkan endpoint PUT /products/:id
+app.put("/products/:id", (req, res) => productHandler.updateById(req, res)); // Endpoint untuk update produk
 
 // Route untuk Category
 app.get("/categories", (req, res) => categoryHandler.getAll(req, res));
+app.get("/categories/:id", (req, res) => categoryHandler.getById(req, res));
 app.post("/categories", (req, res) => categoryHandler.create(req, res));
+app.put("/categories/:id", (req, res) => categoryHandler.updateById(req, res)); // Endpoint untuk update kategori
+app.delete("/categories/:id", (req, res) =>
+  categoryHandler.deleteById(req, res)
+);
 
 // Route untuk Order
 app.get("/orders", (req, res) => orderHandler.getAll(req, res));
