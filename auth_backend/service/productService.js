@@ -6,18 +6,22 @@ class ProductService {
 
   async getAll() {
     const products = await this.productRepository.getAll();
-
     return products;
   }
 
   async create(product) {
     const createdProduct = await this.productRepository.insert(product);
-
     return createdProduct;
   }
 
+  async updateById(id, updates) {
+    // Validate updates if necessary
+    const updatedProduct = await this.productRepository.updateById(id, updates);
+    return updatedProduct;
+  }
+
   getAllOld() {
-    // digabungkan dengan data user yang memiliki produk tersebut
+    // Digabungkan dengan data user yang memiliki produk tersebut
     const products = this.productRepository.getAll();
     const productsUser = [];
 

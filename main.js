@@ -68,6 +68,7 @@ app.post("/login", (req, res) => userHandler.login(req, res));
 // Route untuk Product
 app.get("/products", (req, res) => productHandler.getAll(req, res));
 app.post("/products", (req, res) => productHandler.create(req, res));
+app.put("/products/:id", (req, res) => productHandler.updateById(req, res)); // Tambahkan endpoint PUT /products/:id
 
 // Route untuk Category
 app.get("/categories", (req, res) => categoryHandler.getAll(req, res));
