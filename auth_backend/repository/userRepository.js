@@ -1,62 +1,51 @@
-const pgConn = require("../config/postgres");
 const users = [
   {
+    id: 1,
     name: "Adit",
     email: "adit@gmail.com",
     password: "Adit123",
   },
   {
+    id: 2,
     name: "han vir",
     email: "hanvir@gmail.com",
     password: "HanVir123",
   },
   {
-    name: "fairuz",
-    email: "fairuz@gmail.com",
-    password: "fairuz123",
+    id: 3,
+    name: "Adit",
+    email: "adit@gmail.com",
+    password: "Adit123",
   },
 ];
 
 class UserRepository {
-  constructor() {}
-
-  async getAll() {
-    try {
-      const getUsers = await pgConn.query("SELECT name, email FROM users");
-      return getUsers.rows;
-    } catch (error) {
-      throw new Error("Error while fetching users: ${error.message}");
-    }
+  constructor() {
+    this.users = users;
   }
 
-  async getByEmail(email) {
-    try {
-      const getUser = await pgConn.query(
-        "SELECT * FROM users WHERE email = $1",
-        [email]
-      );
-      return getUser.rows[0];
-    } catch (error) {
-      throw new Error("Error while fetching user: ${error.message}");
-    }
+  getAll() {
+    return this.users;
   }
 
-  async addUser(user) {
-    try {
-      const existingUser = await this.getByEmail(user.email);
-      if (existingUser) {
-        throw new Error("User with this email already exists");
-      }
+  getByEmail(email) {
+    return this.users.find((user) => user.email === email);
+  }
 
-      const { name, email, password } = user;
-      const newUser = await pgConn.query(
-        "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING name, email",
-        [name, email, password]
-      );
-      return newUser.rows[0];
-    } catch (error) {
-      throw new Error(`Error while adding user: ${error.message}`);
-    }
+  insert(user) {
+    const newUser = {
+      id: this.users.length + 1, // generate new id (not realistic in a real database)
+      ...user,
+    };
+    this.users.push(newUser);
+    return newUser;
+  }
+
+  authenticate(email, password) {
+    const user = this.users.find(
+      (user) => user.email === email && user.password === password
+    );
+    return user;
   }
 }
 

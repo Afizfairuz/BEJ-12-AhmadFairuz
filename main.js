@@ -60,24 +60,24 @@ const categoryHandler = new CategoryHandler(categoryService);
 const orderHandler = new OrderHandler(orderService);
 
 // Route untuk User
-app.get("/users", userHandler.getAll);
-app.get("/users/:email", userHandler.getByEmail);
-app.post("/register", userHandler.register);
-app.post("/login", userHandler.login);
+app.get("/users", (req, res) => userHandler.getAll(req, res));
+app.get("/users/:email", (req, res) => userHandler.getByEmail(req, res));
+app.post("/register", (req, res) => userHandler.register(req, res));
+app.post("/login", (req, res) => userHandler.login(req, res));
 
 // Route untuk Product
-app.get("/products", productHandler.getAll);
-app.post("/products", productHandler.create);
+app.get("/products", (req, res) => productHandler.getAll(req, res));
+app.post("/products", (req, res) => productHandler.create(req, res));
 
 // Route untuk Category
-app.get("/categories", categoryHandler.getAll);
-app.post("/categories", categoryHandler.create);
+app.get("/categories", (req, res) => categoryHandler.getAll(req, res));
+app.post("/categories", (req, res) => categoryHandler.create(req, res));
 
 // Route untuk Order
-app.get("/orders", orderHandler.getAll);
-app.get("/orders/:id", orderHandler.getById);
-app.post("/orders", orderHandler.addOrder);
-app.delete("/orders/:id", orderHandler.deleteOrderById);
+app.get("/orders", (req, res) => orderHandler.getAll(req, res));
+app.get("/orders/:id", (req, res) => orderHandler.getById(req, res));
+app.post("/orders", (req, res) => orderHandler.addOrder(req, res));
+app.delete("/orders/:id", (req, res) => orderHandler.deleteOrderById(req, res));
 
 // Endpoint untuk menyajikan gambar
 app.get("/images/binar.png", (req, res) => {

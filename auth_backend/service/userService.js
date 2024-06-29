@@ -3,33 +3,25 @@ class UserService {
     this.userRepository = userRepository;
   }
 
-  async getAllUsers() {
-    try {
-      return await this.userRepository.getAll();
-    } catch (error) {
-      throw new Error(`Error while fetching users: ${error.message}`);
-    }
+  getAllUsers() {
+    return this.userRepository.getAll();
   }
 
-  async registerUser(user) {
-    try {
-      return await this.userRepository.addUser(user);
-    } catch (error) {
-      throw new Error(`Error while registering user: ${error.message}`);
-    }
+  getUserByEmail(email) {
+    return this.userRepository.getByEmail(email);
   }
 
-  async login(email, password) {
-    try {
-      const user = await this.userRepository.getByEmail(email);
-      if (user && user.password === password) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      throw new Error(`Error while logging in: ${error.message}`);
-    }
+  registerUser(name, email, password) {
+    const newUser = {
+      name: name,
+      email: email,
+      password: password,
+    };
+    return this.userRepository.insert(newUser);
+  }
+
+  loginUser(email, password) {
+    return this.userRepository.authenticate(email, password);
   }
 }
 

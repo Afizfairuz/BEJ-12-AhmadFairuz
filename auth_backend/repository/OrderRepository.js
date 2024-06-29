@@ -21,28 +21,28 @@ class OrderRepository {
 
   async getAll() {
     const getOrders =
-      await pgConn`SELECT id, user_email, products, total, status FROM orders`;
+      await pgConn`SELECT id, user_id, products, total, status FROM orders`;
     return getOrders;
   }
 
   async getById(id) {
     const getOrder =
-      await pgConn`SELECT id, user_email, products, total, status FROM orders WHERE id = ${id}`;
+      await pgConn`SELECT id, user_id, products, total, status FROM orders WHERE id = ${id}`;
     return getOrder[0];
   }
 
   async addOrder(order) {
     const { user_email, products, total, status } = order;
     const addedOrder = await pgConn`
-      INSERT INTO orders (user_email, products, total, status)
+      INSERT INTO orders (user_id, products, total, status)
       VALUES (${user_email}, ${products}, ${total}, ${status})
-      RETURNING id, user_email, products, total, status`;
+      RETURNING id, user_id, products, total, status`;
     return addedOrder[0];
   }
 
   async deleteById(id) {
     const deletedOrder = await pgConn`
-      DELETE FROM orders WHERE id = ${id} RETURNING id, user_email, products, total, status`;
+      DELETE FROM orders WHERE id = ${id} RETURNING id, user_id, products, total, status`;
     return deletedOrder[0];
   }
 }

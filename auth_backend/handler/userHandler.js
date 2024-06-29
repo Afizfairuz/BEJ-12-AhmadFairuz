@@ -1,20 +1,16 @@
+// Contoh implementasi UserHandler
 class UserHandler {
   constructor(userService) {
     this.userService = userService;
-
-    // Binding
-    this.getAll = this.getAll.bind(this);
-    this.getByEmail = this.getByEmail.bind(this);
-    this.register = this.register.bind(this);
-    this.login = this.login.bind(this);
   }
 
   async getAll(req, res) {
     try {
       const users = await this.userService.getAllUsers();
-      res.status(200).json({ users });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.json(users);
+    } catch (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: "Internal Server Error" });
     }
   }
 
@@ -22,40 +18,44 @@ class UserHandler {
     const email = req.params.email;
     try {
       const user = await this.userService.getUserByEmail(email);
-      if (user) {
-        res.status(200).json({ user });
+      if (!user) {
+        res.status(404).json({ error: "User not found" });
       } else {
-        res.status(404).json({ message: "User not found" });
+        res.json(user);
       }
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+    } catch (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: "Internal Server Error" });
     }
   }
 
   async register(req, res) {
-    const newUser = req.body;
+    const { name, email, password } = req.body;
     try {
-      const registeredUser = await this.userService.registerUser(newUser);
-      res.status(201).json({
-        message: "User registered successfully",
-        user: registeredUser,
-      });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+      const newUser = await this.userService.registerUser(
+        name,
+        email,
+        password
+      );
+      res.json(newUser);
+    } catch (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: "Internal Server Error" });
     }
   }
 
   async login(req, res) {
     const { email, password } = req.body;
     try {
-      const loginSuccess = await this.userService.login(email, password);
-      if (loginSuccess) {
-        res.status(200).json({ message: "Login successful" });
+      const user = await this.userService.loginUser(email, password);
+      if (!user) {
+        res.status(401).json({ error: "Invalid credentials" });
       } else {
-        res.status(401).json({ message: "Invalid email or password" });
+        res.json(user);
       }
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+    } catch (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: "Internal Server Error" });
     }
   }
 }
