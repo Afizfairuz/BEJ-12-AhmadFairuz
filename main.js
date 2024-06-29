@@ -3,26 +3,9 @@ const path = require("path");
 const app = express();
 const PORT = 8000;
 
-// Mengimpor repository
-const UserRepository = require("./auth_backend/repository/UserRepository");
-const ProductRepository = require("./auth_backend/repository/ProductRepository");
-const CategoryRepository = require("./auth_backend/repository/CategoryRepository");
-const OrderRepository = require("./auth_backend/repository/OrderRepository");
-
-// Mengimpor service
-const UserService = require("./auth_backend/service/UserService");
-const ProductService = require("./auth_backend/service/ProductService");
-const CategoryService = require("./auth_backend/service/CategoryService");
-const OrderService = require("./auth_backend/service/OrderService");
-
-// Mengimpor handler
-const UserHandler = require("./auth_backend/handler/UserHandler");
-const ProductHandler = require("./auth_backend/handler/ProductHandler");
-const CategoryHandler = require("./auth_backend/handler/CategoryHandler");
-const OrderHandler = require("./auth_backend/handler/OrderHandler");
-
 // Middleware untuk parsing request body
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Middleware untuk logging
 const logger = (req, res, next) => {
@@ -42,22 +25,43 @@ const internalServerErrorHandler = (err, req, res, next) => {
 app.use(internalServerErrorHandler);
 
 // Inisialisasi repository
+const UserRepository = require("./auth_backend/repository/UserRepository");
+const ProductRepository = require("./auth_backend/repository/ProductRepository");
+const CategoryRepository = require("./auth_backend/repository/CategoryRepository");
+const OrderRepository = require("./auth_backend/repository/OrderRepository");
+const ItemRepository = require("./auth_backend/repository/ItemRepository");
+
 const userRepository = new UserRepository();
 const productRepository = new ProductRepository();
 const categoryRepository = new CategoryRepository();
-const orderRepository = new OrderRepository(); // Inisialisasi OrderRepository
+const orderRepository = new OrderRepository();
+const itemRepository = new ItemRepository();
 
 // Inisialisasi service
+const UserService = require("./auth_backend/service/UserService");
+const ProductService = require("./auth_backend/service/ProductService");
+const CategoryService = require("./auth_backend/service/CategoryService");
+const OrderService = require("./auth_backend/service/OrderService");
+const ItemService = require("./auth_backend/service/ItemService");
+
 const userService = new UserService(userRepository);
 const productService = new ProductService(productRepository, userRepository);
 const categoryService = new CategoryService(categoryRepository);
-const orderService = new OrderService(orderRepository); // Inisialisasi OrderService
+const orderService = new OrderService(orderRepository);
+const itemService = new ItemService(itemRepository);
 
 // Inisialisasi handler
+const UserHandler = require("./auth_backend/handler/UserHandler");
+const ProductHandler = require("./auth_backend/handler/ProductHandler");
+const CategoryHandler = require("./auth_backend/handler/CategoryHandler");
+const OrderHandler = require("./auth_backend/handler/OrderHandler");
+const ItemHandler = require("./auth_backend/handler/ItemHandler");
+
 const userHandler = new UserHandler(userService);
 const productHandler = new ProductHandler(productService);
 const categoryHandler = new CategoryHandler(categoryService);
-const orderHandler = new OrderHandler(orderService); // Inisialisasi OrderHandler
+const orderHandler = new OrderHandler(orderService);
+const itemHandler = new ItemHandler(itemService);
 
 // Route untuk User
 app.get("/users", (req, res) => userHandler.getAll(req, res));
@@ -68,13 +72,13 @@ app.post("/login", (req, res) => userHandler.login(req, res));
 // Route untuk Product
 app.get("/products", (req, res) => productHandler.getAll(req, res));
 app.post("/products", (req, res) => productHandler.create(req, res));
-app.put("/products/:id", (req, res) => productHandler.updateById(req, res)); // Endpoint untuk update produk
+app.put("/products/:id", (req, res) => productHandler.updateById(req, res));
 
 // Route untuk Category
 app.get("/categories", (req, res) => categoryHandler.getAll(req, res));
 app.get("/categories/:id", (req, res) => categoryHandler.getById(req, res));
 app.post("/categories", (req, res) => categoryHandler.create(req, res));
-app.put("/categories/:id", (req, res) => categoryHandler.updateById(req, res)); // Endpoint untuk update kategori
+app.put("/categories/:id", (req, res) => categoryHandler.updateById(req, res));
 app.delete("/categories/:id", (req, res) =>
   categoryHandler.deleteById(req, res)
 );
@@ -82,9 +86,16 @@ app.delete("/categories/:id", (req, res) =>
 // Route untuk Order
 app.get("/orders", (req, res) => orderHandler.getAll(req, res));
 app.get("/orders/:id", (req, res) => orderHandler.getById(req, res));
-app.post("/orders", (req, res) => orderHandler.create(req, res)); // Endpoint untuk create order
-app.put("/orders/:id", (req, res) => orderHandler.updateById(req, res)); // Endpoint untuk update order
-app.delete("/orders/:id", (req, res) => orderHandler.deleteById(req, res)); // Endpoint untuk delete order
+app.post("/orders", (req, res) => orderHandler.create(req, res));
+app.put("/orders/:id", (req, res) => orderHandler.updateById(req, res));
+app.delete("/orders/:id", (req, res) => orderHandler.deleteById(req, res));
+
+// Route untuk Item
+app.get("/items", (req, res) => itemHandler.getAll(req, res));
+app.get("/items/:id", (req, res) => itemHandler.getById(req, res));
+app.post("/items", (req, res) => itemHandler.create(req, res));
+app.put("/items/:id", (req, res) => itemHandler.updateById(req, res));
+app.delete("/items/:id", (req, res) => itemHandler.deleteById(req, res));
 
 // Endpoint untuk menyajikan gambar
 app.get("/images/binar.png", (req, res) => {
