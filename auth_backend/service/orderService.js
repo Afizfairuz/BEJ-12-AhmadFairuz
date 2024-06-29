@@ -1,41 +1,52 @@
+const OrderRepository = require("../repository/OrderRepository");
+
 class OrderService {
   constructor(orderRepository) {
     this.orderRepository = orderRepository || new OrderRepository();
   }
 
-  async getAllOrders() {
+  async getAll() {
     try {
-      return await this.orderRepository.getAll();
+      const orders = await this.orderRepository.getAll();
+      return orders;
     } catch (error) {
-      throw new Error(`Error while fetching orders: ${error.message}`);
+      throw error;
     }
   }
 
-  async getOrderById(id) {
+  async getById(id) {
     try {
-      return await this.orderRepository.getById(id);
+      const order = await this.orderRepository.getById(id);
+      return order;
     } catch (error) {
-      throw new Error(
-        `Error while fetching order with id ${id}: ${error.message}`
-      );
+      throw error;
     }
   }
 
-  async addOrder(order) {
+  async create(order) {
     try {
-      return await this.orderRepository.addOrder(order);
+      const createdOrder = await this.orderRepository.insert(order);
+      return createdOrder;
     } catch (error) {
-      throw new Error(`Error while adding order: ${error.message}`);
+      throw error;
     }
   }
 
-  async deleteOrderById(id) {
+  async updateById(id, updates) {
     try {
-      return await this.orderRepository.deleteById(id);
+      const updatedOrder = await this.orderRepository.updateById(id, updates);
+      return updatedOrder;
     } catch (error) {
-      throw new Error(
-        `Error while deleting order with id ${id}: ${error.message}`
-      );
+      throw error;
+    }
+  }
+
+  async deleteById(id) {
+    try {
+      const deletedOrder = await this.orderRepository.deleteById(id);
+      return deletedOrder;
+    } catch (error) {
+      throw error;
     }
   }
 }

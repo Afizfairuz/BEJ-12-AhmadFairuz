@@ -45,19 +45,19 @@ app.use(internalServerErrorHandler);
 const userRepository = new UserRepository();
 const productRepository = new ProductRepository();
 const categoryRepository = new CategoryRepository();
-const orderRepository = new OrderRepository();
+const orderRepository = new OrderRepository(); // Inisialisasi OrderRepository
 
 // Inisialisasi service
 const userService = new UserService(userRepository);
 const productService = new ProductService(productRepository, userRepository);
 const categoryService = new CategoryService(categoryRepository);
-const orderService = new OrderService(orderRepository);
+const orderService = new OrderService(orderRepository); // Inisialisasi OrderService
 
 // Inisialisasi handler
 const userHandler = new UserHandler(userService);
 const productHandler = new ProductHandler(productService);
 const categoryHandler = new CategoryHandler(categoryService);
-const orderHandler = new OrderHandler(orderService);
+const orderHandler = new OrderHandler(orderService); // Inisialisasi OrderHandler
 
 // Route untuk User
 app.get("/users", (req, res) => userHandler.getAll(req, res));
@@ -82,8 +82,9 @@ app.delete("/categories/:id", (req, res) =>
 // Route untuk Order
 app.get("/orders", (req, res) => orderHandler.getAll(req, res));
 app.get("/orders/:id", (req, res) => orderHandler.getById(req, res));
-app.post("/orders", (req, res) => orderHandler.addOrder(req, res));
-app.delete("/orders/:id", (req, res) => orderHandler.deleteOrderById(req, res));
+app.post("/orders", (req, res) => orderHandler.create(req, res)); // Endpoint untuk create order
+app.put("/orders/:id", (req, res) => orderHandler.updateById(req, res)); // Endpoint untuk update order
+app.delete("/orders/:id", (req, res) => orderHandler.deleteById(req, res)); // Endpoint untuk delete order
 
 // Endpoint untuk menyajikan gambar
 app.get("/images/binar.png", (req, res) => {
