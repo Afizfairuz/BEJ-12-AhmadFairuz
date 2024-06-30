@@ -1,25 +1,36 @@
-'use strict';
+"use strict";
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
+  up: async (queryInterface, Sequelize) => {
+    const now = new Date();
+
+    await queryInterface.bulkInsert(
+      "Categories",
+      [
+        {
+          name: "Electronics",
+          description: "Category for electronic",
+          createdAt: now,
+          updatedAt: now,
+        },
+        {
+          name: "baju",
+          description: "kategori baju",
+          createdAt: now,
+          updatedAt: now,
+        },
+        {
+          name: "buku",
+          description: "materi buku ",
+          createdAt: now,
+          updatedAt: now,
+        },
+      ],
+      {}
+    );
   },
 
-  async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
-  }
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.bulkDelete("Categories", null, {});
+  },
 };
