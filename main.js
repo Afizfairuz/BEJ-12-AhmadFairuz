@@ -43,12 +43,14 @@ const ProductService = require("./auth_backend/service/ProductService");
 const CategoryService = require("./auth_backend/service/CategoryService");
 const OrderService = require("./auth_backend/service/OrderService");
 const ItemService = require("./auth_backend/service/ItemService");
+const AuthService = require("./auth_backend/service/authService");
 
 const userService = new UserService(userRepository);
 const productService = new ProductService(productRepository, userRepository);
 const categoryService = new CategoryService(categoryRepository);
 const orderService = new OrderService(orderRepository);
 const itemService = new ItemService(itemRepository);
+const authService = new AuthService(userRepository);
 
 // Inisialisasi handler
 const UserHandler = require("./auth_backend/handler/UserHandler");
@@ -56,18 +58,20 @@ const ProductHandler = require("./auth_backend/handler/ProductHandler");
 const CategoryHandler = require("./auth_backend/handler/CategoryHandler");
 const OrderHandler = require("./auth_backend/handler/OrderHandler");
 const ItemHandler = require("./auth_backend/handler/ItemHandler");
+const AuthHandler = require("./auth_backend/handler/authHandler");
 
 const userHandler = new UserHandler(userService);
 const productHandler = new ProductHandler(productService);
 const categoryHandler = new CategoryHandler(categoryService);
 const orderHandler = new OrderHandler(orderService);
 const itemHandler = new ItemHandler(itemService);
+const authHandler = new AuthHandler(authService);
 
 // Route untuk User
 app.get("/users", (req, res) => userHandler.getAll(req, res));
 app.get("/users/:email", (req, res) => userHandler.getByEmail(req, res));
-app.post("/register", (req, res) => userHandler.register(req, res));
-app.post("/login", (req, res) => userHandler.login(req, res));
+app.post("/register", (req, res) => authHandler.register(req, res));
+app.post("/login", (req, res) => authHandler.login(req, res));
 
 // Route untuk Product
 app.get("/products", (req, res) => productHandler.getAll(req, res));
