@@ -1,61 +1,44 @@
-// Contoh implementasi UserHandler
+const UserService = require('../service/userService');
+
 class UserHandler {
-  constructor(userService) {
-    this.userService = userService;
+  constructor() {
+    this.userService = new UserService();
   }
 
-  async getAll(req, res) {
+  async getAllUsers(req, res) {
     try {
       const users = await this.userService.getAllUsers();
       res.json(users);
     } catch (err) {
-      console.error("Error:", err);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ message: err.message });
     }
   }
 
-  async getByEmail(req, res) {
-    const email = req.params.email;
+  async createUser(req, res) {
     try {
-      const user = await this.userService.getUserByEmail(email);
-      if (!user) {
-        res.status(404).json({ error: "User not found" });
-      } else {
-        res.json(user);
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  }
-
-  async register(req, res) {
-    const { name, email, password } = req.body;
-    try {
-      const newUser = await this.userService.registerUser(
+      const { name, email, password } = req.body;
+      const newUser = await this.userService.createUser({
         name,
         email,
-        password
-      );
-      res.json(newUser);
+        password,
+      });
+      res.status(201).json(newUser);
     } catch (err) {
-      console.error("Error:", err);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ message: err.message });
     }
   }
 
-  async login(req, res) {
-    const { email, password } = req.body;
+  async getUserByEmail(req, res) {
     try {
-      const user = await this.userService.loginUser(email, password);
-      if (!user) {
-        res.status(401).json({ error: "Invalid credentials" });
-      } else {
+      const { email } = req.params;
+      const user = await this.userService.getUserByEmail(email);
+      if (user) {
         res.json(user);
+      } else {
+        res.status(404).json({ message: "User not found" });
       }
     } catch (err) {
-      console.error("Error:", err);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ message: err.message });
     }
   }
 }

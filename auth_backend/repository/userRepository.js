@@ -1,50 +1,24 @@
-const users = [
-  {
-    id: 1,
-    name: "Adit",
-    email: "adit@gmail.com",
-    password: "Adit123",
-  },
-  {
-    id: 2,
-    name: "han vir",
-    email: "hanvir@gmail.com",
-    password: "HanVir123",
-  },
-  {
-    id: 3,
-    name: "Adit",
-    email: "adit@gmail.com",
-    password: "Adit123",
-  },
-];
+const { User } = require('../../models/user');
 
 class UserRepository {
-  constructor() {
-    this.users = users;
+  constructor() {}
+
+  async findAll() {
+    const userList = await User.findAll();
+    return userList;
   }
 
-  getAll() {
-    return this.users;
+  async insert(user) {
+    const createdUser = await User.create({
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    });
+    return createdUser;
   }
 
-  getByEmail(email) {
-    return this.users.find((user) => user.email === email);
-  }
-
-  insert(user) {
-    const newUser = {
-      id: this.users.length + 1, // generate new id (not realistic in a real database)
-      ...user,
-    };
-    this.users.push(newUser);
-    return newUser;
-  }
-
-  authenticate(email, password) {
-    const user = this.users.find(
-      (user) => user.email === email && user.password === password
-    );
+  async getByEmail(email) {
+    const user = await User.findOne({ where: { email } });
     return user;
   }
 }

@@ -1,6 +1,7 @@
 "use strict";
 
-const { Model } = require("sequelize");
+const { Model, DataTypes } = require("sequelize");
+const sequelize = require('../auth_backend/config/postgres');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
