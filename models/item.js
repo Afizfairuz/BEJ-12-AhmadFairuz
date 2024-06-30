@@ -1,24 +1,33 @@
-// models/Item.js
-
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  const Item = sequelize.define(
-    "Item",
+  class Item extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The models/index file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    }
+  }
+  Item.init(
     {
       id: {
         type: DataTypes.INTEGER,
-        autoIncrement: true,
         primaryKey: true,
+        autoIncrement: true,
       },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       description: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: true,
       },
       price: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.DECIMAL,
         allowNull: false,
       },
       stock: {
@@ -27,20 +36,20 @@ module.exports = (sequelize, DataTypes) => {
       },
       createdAt: {
         type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
         allowNull: false,
-        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
         type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
         allowNull: false,
-        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
       },
     },
     {
-      tableName: "items", // Nama tabel yang sesuai dengan yang ada di PostgreSQL
-      timestamps: true, // Menyertakan kolom createdAt dan updatedAt
+      sequelize,
+      modelName: "Item",
+      tableName: "Items",
     }
   );
-
   return Item;
 };
