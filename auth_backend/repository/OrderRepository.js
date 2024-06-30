@@ -1,46 +1,37 @@
 const pgConn = require("../config/postgres");
 
 class OrderRepository {
-  constructor() {}
-
   async getAll() {
-    const getOrders = await pgConn`
-      SELECT id, user_id, status
-      FROM orders`;
-    return getOrders;
+    const orderList = await Order.findAll();
+    return orderList;
   }
 
   async getById(id) {
-    const getOrder = await pgConn`
-      SELECT id, user_id, status
-      FROM orders
-      WHERE id = ${id}`;
-    return getOrder;
+    const order = await Order.findByPk(id);
+    return order;
   }
 
-  async insert(order) {
-    const createdOrder = await pgConn`
-      INSERT INTO orders (user_id, status)
-      VALUES (${order.user_id}, ${order.status})
-      RETURNING *`;
-    return createdOrder;
+  async create(orderData) {
+    const newOrder = await Order.create(orderData);
+    return newOrder;
   }
 
-  async updateById(id, updates) {
-    const updatedOrder = await pgConn`
-      UPDATE orders
-      SET user_id = ${updates.user_id}, status = ${updates.status}
-      WHERE id = ${id}
-      RETURNING *`;
-    return updatedOrder;
+  async update(id, orderData) {
+    const order = await Order.findByPk(id);
+    if (!order) {
+      throw new Error("Order not found");
+    }
+    await order.update(orderData);
+    return order;
   }
 
-  async deleteById(id) {
-    const deletedOrder = await pgConn`
-      DELETE FROM orders
-      WHERE id = ${id}
-      RETURNING *`;
-    return deletedOrder;
+  async delete(id) {
+    const order = await Order.findByPk(id);
+    if (!order) {
+      throw new Error("Order not found");
+    }
+    await order.destroy();
+    return order;
   }
 }
 

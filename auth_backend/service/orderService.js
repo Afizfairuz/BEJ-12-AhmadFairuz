@@ -1,53 +1,33 @@
 const OrderRepository = require("../repository/OrderRepository");
 
 class OrderService {
-  constructor(orderRepository) {
-    this.orderRepository = orderRepository || new OrderRepository();
+  constructor() {
+    this.orderRepository = new OrderRepository();
   }
 
-  async getAll() {
-    try {
-      const orders = await this.orderRepository.getAll();
-      return orders;
-    } catch (error) {
-      throw error;
-    }
+  async getAllOrders() {
+    const orders = await this.orderRepository.getAll();
+    return orders;
   }
 
-  async getById(id) {
-    try {
-      const order = await this.orderRepository.getById(id);
-      return order;
-    } catch (error) {
-      throw error;
-    }
+  async getOrderById(id) {
+    const order = await this.orderRepository.getById(id);
+    return order;
   }
 
-  async create(order) {
-    try {
-      const createdOrder = await this.orderRepository.insert(order);
-      return createdOrder;
-    } catch (error) {
-      throw error;
-    }
+  async createOrder(orderData) {
+    const newOrder = await this.orderRepository.create(orderData);
+    return newOrder;
   }
 
-  async updateById(id, updates) {
-    try {
-      const updatedOrder = await this.orderRepository.updateById(id, updates);
-      return updatedOrder;
-    } catch (error) {
-      throw error;
-    }
+  async updateOrder(id, orderData) {
+    const updatedOrder = await this.orderRepository.update(id, orderData);
+    return updatedOrder;
   }
 
-  async deleteById(id) {
-    try {
-      const deletedOrder = await this.orderRepository.deleteById(id);
-      return deletedOrder;
-    } catch (error) {
-      throw error;
-    }
+  async deleteOrder(id) {
+    const deletedOrder = await this.orderRepository.delete(id);
+    return deletedOrder;
   }
 }
 

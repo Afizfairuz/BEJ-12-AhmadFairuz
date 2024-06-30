@@ -1,79 +1,61 @@
-class OrderHandler {
-  constructor(orderService) {
-    this.orderService = orderService;
+const OrderService = require("../service/orderService");
 
-    // Binding
-    this.getAll = this.getAll.bind(this);
-    this.getById = this.getById.bind(this);
-    this.create = this.create.bind(this);
-    this.updateById = this.updateById.bind(this);
-    this.deleteById = this.deleteById.bind(this);
+class OrderHandler {
+  constructor() {
+    this.orderService = new OrderService();
   }
 
   async getAll(req, res) {
     try {
-      const orders = await this.orderService.getAll();
-      res.status(200).json({ orders });
-    } catch (err) {
-      console.error("Error getting orders:", err);
-      res.status(500).json({ message: "Internal Server Error" });
+      const orders = await this.orderService.getAllOrders();
+      res.json(orders);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   }
 
   async getById(req, res) {
+    const { id } = req.params;
     try {
-      const orderId = req.params.id;
-      const order = await this.orderService.getById(orderId);
+      const order = await this.orderService.getOrderById(id);
       if (!order) {
         res.status(404).json({ message: "Order not found" });
-        return;
+      } else {
+        res.json(order);
       }
-      res.status(200).json({ order });
-    } catch (err) {
-      console.error("Error getting order by id:", err);
-      res.status(500).json({ message: "Internal Server Error" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   }
 
   async create(req, res) {
+    const orderData = req.body;
     try {
-      const newOrder = req.body;
-      const createdOrder = await this.orderService.create(newOrder);
-      res.status(201).json({ createdOrder });
-    } catch (err) {
-      console.error("Error creating order:", err);
-      res.status(500).json({ message: "Internal Server Error" });
+      const newOrder = await this.orderService.createOrder(orderData);
+      res.status(201).json(newOrder);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   }
 
   async updateById(req, res) {
+    const { id } = req.params;
+    const orderData = req.body;
     try {
-      const orderId = req.params.id;
-      const updates = req.body;
-      const updatedOrder = await this.orderService.updateById(orderId, updates);
-      if (!updatedOrder) {
-        res.status(404).json({ message: "Order not found" });
-        return;
-      }
-      res.status(200).json({ updatedOrder });
-    } catch (err) {
-      console.error("Error updating order:", err);
-      res.status(500).json({ message: "Internal Server Error" });
+      const updatedOrder = await this.orderService.updateOrder(id, orderData);
+      res.json(updatedOrder);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   }
 
   async deleteById(req, res) {
+    const { id } = req.params;
     try {
-      const orderId = req.params.id;
-      const deletedOrder = await this.orderService.deleteById(orderId);
-      if (!deletedOrder) {
-        res.status(404).json({ message: "Order not found" });
-        return;
-      }
-      res.status(200).json({ deletedOrder });
-    } catch (err) {
-      console.error("Error deleting order:", err);
-      res.status(500).json({ message: "Internal Server Error" });
+      const deletedOrder = await this.orderService.deleteOrder(id);
+      res.json(deletedOrder);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   }
 }
