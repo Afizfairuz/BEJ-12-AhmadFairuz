@@ -1,44 +1,65 @@
-// categoryRepository.js
-
-const pgConn = require("../config/postgres");
+const { category } = require('../../models/category')
 
 class CategoryRepository {
   constructor() {}
 
   async getAll() {
-    const getCategories = await pgConn`select id, name from categories`;
-    return getCategories;
+    const getCategories = await pgConn.query(`
+      SELECT id, name, description
+      FROM categories
+    `);
+    return getCategories.rows;
   }
 
   async getById(id) {
-    const getCategory =
-      await pgConn`select id, name from categories where id = ${id}`;
-    return getCategory[0]; // assuming id is unique, return the first result
+    const getCategory = await pgConn.query(
+      `
+      SELECT id, name, description
+      FROM categories
+      WHERE id = $1
+    `,
+      [id]
+    );
+    return getCategory.rows[0];
   }
 
   async insert(category) {
-    const createdCategory = await pgConn`
-      insert into categories (name) values (${category.name})
-      returning *`; // returning the inserted category
-
-    return createdCategory[0]; // assuming returning * returns an array, return the first item
+    const { name, description } = category;
+    const createdCategory = await pgConn.query(
+      `
+      INSERT INTO categories (name, description)
+      VALUES ($1, $2)
+      RETURNING *
+    `,
+      [name, description]
+    );
+    return createdCategory.rows[0];
   }
 
   async updateById(id, updates) {
-    const updatedCategory = await pgConn`
-      update categories set name = ${updates.name}
-      where id = ${id}
-      returning *`; // returning the updated category
-
-    return updatedCategory[0]; // assuming returning * returns an array, return the first item
+    const { name, description } = updates;
+    const updatedCategory = await pgConn.query(
+      `
+      UPDATE categories
+      SET name = $1, description = $2
+      WHERE id = $3
+      RETURNING *
+    `,
+      [name, description, id]
+    );
+    return updatedCategory.rows[0];
   }
 
   async deleteById(id) {
-    const deletedCategory = await pgConn`
-      delete from categories where id = ${id}
-      returning *`; // returning the deleted category
-
-    return deletedCategory[0]; // assuming returning * returns an array, return the first item
+    const deletedCategory = await pgConn.query(
+      `
+      DELETE FROM categories
+      WHERE id = $1
+      RETURNING *
+    `,
+      [id]
+    );
+    return deletedCategory.rows[0];
   }
 }
 

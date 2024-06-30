@@ -1,4 +1,4 @@
-const pgConn = require("../config/postgres");
+const { Item } = require('../../models/item')
 
 class ItemRepository {
   constructor() {}

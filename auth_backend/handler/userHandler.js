@@ -1,4 +1,4 @@
-const UserService = require('../service/userService');
+const UserService = require("../service/userService");
 
 class UserHandler {
   constructor() {
@@ -34,6 +34,40 @@ class UserHandler {
       const user = await this.userService.getUserByEmail(email);
       if (user) {
         res.json(user);
+      } else {
+        res.status(404).json({ message: "User not found" });
+      }
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+
+  async updateUser(req, res) {
+    try {
+      const { id } = req.params;
+      const { name, email, password } = req.body;
+      const updatedUser = await this.userService.updateUser(
+        id,
+        name,
+        email,
+        password
+      );
+      if (updatedUser) {
+        res.json(updatedUser);
+      } else {
+        res.status(404).json({ message: "User not found" });
+      }
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+
+  async deleteUser(req, res) {
+    try {
+      const { id } = req.params;
+      const deletedUser = await this.userService.deleteUser(id);
+      if (deletedUser) {
+        res.status(204).send();
       } else {
         res.status(404).json({ message: "User not found" });
       }

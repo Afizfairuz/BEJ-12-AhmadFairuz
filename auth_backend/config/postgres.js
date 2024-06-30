@@ -1,11 +1,8 @@
-const postgres = require("postgres");
+const { Sequelize } = require("sequelize");
 
-const connection = postgres({
-  host: "localhost",
-  port: 5432,
-  database: "auth_backend",
-  username: "postgres",
-  password: "afizfairuz87",
+const sequelize = new Sequelize("auth_backend", "postgres", "afizfairuz87", {
+  host: "127.0.0.1",
+  dialect: "postgres",
 });
 
-module.exports = connection;
+module.exports = sequelize;

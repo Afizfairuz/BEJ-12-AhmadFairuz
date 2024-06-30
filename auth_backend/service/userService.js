@@ -1,4 +1,4 @@
-const UserRepository =  require('../repository/UserRepository');
+const UserRepository = require("../repository/UserRepository");
 
 class UserService {
   constructor() {
@@ -10,11 +10,19 @@ class UserService {
   }
 
   async createUser(user) {
-    return await this.userRepository.insert(user);
+    return await this.userRepository.createUser(user);
   }
 
   async getUserByEmail(email) {
-    return await this.userRepository.getByEmail(email);
+    return await this.userRepository.getUserByEmail(email);
+  }
+
+  async updateUser(id, name, email, password) {
+    return await this.userRepository.updateUser(id, name, email, password);
+  }
+
+  async deleteUser(id) {
+    return await this.userRepository.deleteUser(id);
   }
 }
 

@@ -71,14 +71,17 @@ const authHandler = new AuthHandler(authService);
 app.get("/users", (req, res) => {
   userHandler.getAllUsers(req, res);
 });
+app.post("/users", (req, res) => {
+  userHandler.createUser(req, res);
+});
 app.get("/users/:email", (req, res) => {
   userHandler.getUserByEmail(req, res);
 });
-app.post("/register", (req, res) => {
-  authHandler.register(req, res); 
+app.put("/users/:id", (req, res) => {
+  userHandler.updateUser(req, res);
 });
-app.post("/login", (req, res) => {
-  authHandler.login(req, res); 
+app.delete("/users/:id", (req, res) => {
+  userHandler.deleteUser(req, res);
 });
 
 // Route untuk Product
