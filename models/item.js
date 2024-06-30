@@ -1,23 +1,46 @@
-"use strict";
-const { Model } = require("sequelize");
+// models/Item.js
 
 module.exports = (sequelize, DataTypes) => {
-  class Item extends Model {
-    static associate(models) {
-      // Define associations here if needed
-    }
-  }
-  Item.init(
+  const Item = sequelize.define(
+    "Item",
     {
-      name: DataTypes.STRING,
-      quantity: DataTypes.INTEGER,
-      price: DataTypes.FLOAT,
-      productId: DataTypes.INTEGER, // Contoh kunci asing, sesuaikan sesuai kebutuhan
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      price: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      stock: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      },
     },
     {
-      sequelize,
-      modelName: "Item",
+      tableName: "items", // Nama tabel yang sesuai dengan yang ada di PostgreSQL
+      timestamps: true, // Menyertakan kolom createdAt dan updatedAt
     }
   );
+
   return Item;
 };

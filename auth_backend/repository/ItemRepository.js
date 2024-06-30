@@ -4,39 +4,44 @@ class ItemRepository {
   constructor() {}
 
   async getAll() {
-    const getItems = await pgConn`select id, name, quantity, price from items`;
+    const getItems =
+      await pgConn`SELECT id, name, description, price, stock FROM items`;
     return getItems;
   }
 
   async getById(id) {
-    const getItem =
-      await pgConn`select id, name, quantity, price from items where id = ${id}`;
+    const getItem = await pgConn`
+      SELECT id, name, description, price, stock
+      FROM items
+      WHERE id = ${id}`;
     return getItem;
   }
 
   async insert(item) {
+    console.log("Data yang akan disimpan:", item);
     const createdItem = await pgConn`
-      insert into items (name, quantity, price)
-      values (${item.name}, ${item.quantity}, ${item.price})
-      returning *`; // returning the inserted item
+      INSERT INTO items (name, description, price, stock)
+      VALUES (${item.name}, ${item.description}, ${item.price}, ${item.stock})
+      RETURNING *`;
 
     return createdItem;
   }
 
   async updateById(id, updates) {
     const updatedItem = await pgConn`
-      update items set name = ${updates.name}, quantity = ${updates.quantity}, price = ${updates.price}
-      where id = ${id}
-      returning *`; // returning the updated item
+      UPDATE items
+      SET name = ${updates.name}, description = ${updates.description}, price = ${updates.price}, stock = ${updates.stock}
+      WHERE id = ${id}
+      RETURNING *`;
 
     return updatedItem;
   }
 
   async deleteById(id) {
     const deletedItem = await pgConn`
-      delete from items
-      where id = ${id}
-      returning *`; // returning the deleted item
+      DELETE FROM items
+      WHERE id = ${id}
+      RETURNING *`;
 
     return deletedItem;
   }
