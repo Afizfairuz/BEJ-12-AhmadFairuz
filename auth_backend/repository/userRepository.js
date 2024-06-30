@@ -4,22 +4,31 @@ class UserRepository {
   constructor() {}
 
   async findAll() {
-    const userList = await User.findAll();
-    return userList;
+    try {
+      const userList = await User.findAll();
+      console.log("User list:", userList); // Memeriksa hasil findAll()
+      return userList;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  async insert(user) {
-    const createdUser = await User.create({
-      name: user.name,
-      email: user.email,
-      password: user.password,
-    });
-    return createdUser;
+  async insert(userData) {
+    try {
+      const newUser = await User.create(userData);
+      return newUser;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async getByEmail(email) {
-    const user = await User.findOne({ where: { email } });
-    return user;
+    try {
+      const user = await User.findOne({ where: { email } });
+      return user;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
 

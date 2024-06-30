@@ -1,41 +1,64 @@
-class ProductHandler {
-  constructor(productService) {
-    this.productService = productService;
+const ProductService = require("../service/productService");
 
-    // Binding
-    this.getAll = this.getAll.bind(this);
-    this.create = this.create.bind(this);
-    this.updateById = this.updateById.bind(this);
+class ProductHandler {
+  constructor() {
+    this.productService = new ProductService();
   }
 
   async getAll(req, res) {
-    const products = await this.productService.getAll();
-    res.status(200).send({ products });
+    try {
+      const products = await this.productService.getAllProducts();
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async getById(req, res) {
+    const { id } = req.params;
+    try {
+      const product = await this.productService.getProductById(id);
+      if (!product) {
+        res.status(404).json({ message: "Product not found" });
+      } else {
+        res.json(product);
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 
   async create(req, res) {
-    const productToCreate = req.body;
-    const createdProduct = await this.productService.create(productToCreate);
-    res.status(201).send({ created_product: createdProduct });
+    const productData = req.body;
+    try {
+      const newProduct = await this.productService.createProduct(productData);
+      res.status(201).json(newProduct);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 
   async updateById(req, res) {
-    const productId = req.params.id;
-    const updates = req.body; // Updates to apply to the product
-
+    const { id } = req.params;
+    const productData = req.body;
     try {
-      const updatedProduct = await this.productService.updateById(
-        productId,
-        updates
+      const updatedProduct = await this.productService.updateProduct(
+        id,
+        productData
       );
-      if (!updatedProduct) {
-        res.status(404).json({ error: "Product not found" });
-      } else {
-        res.status(200).send({ updated_product: updatedProduct });
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.json(updatedProduct);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async deleteById(req, res) {
+    const { id } = req.params;
+    try {
+      const deletedProduct = await this.productService.deleteProduct(id);
+      res.json(deletedProduct);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   }
 }

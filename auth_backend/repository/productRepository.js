@@ -1,28 +1,37 @@
 const pgConn = require("../config/postgres");
 
 class ProductRepository {
-  constructor() {}
-
   async getAll() {
-    const getProducts = await pgConn`select id, name, price from products`;
-    return getProducts;
+    const productList = await Product.findAll();
+    return productList;
   }
 
-  async insert(product) {
-    const createdProduct = await pgConn`
-      insert into products (name, price) values (${product.name}, ${product.price})
-      returning *`; // returning the inserted product
-
-    return createdProduct;
+  async getById(id) {
+    const product = await Product.findByPk(id);
+    return product;
   }
 
-  async updateById(id, updates) {
-    const updatedProduct = await pgConn`
-      update products set name = ${updates.name}, price = ${updates.price}
-      where id = ${id}
-      returning *`; // returning the updated product
+  async create(productData) {
+    const newProduct = await Product.create(productData);
+    return newProduct;
+  }
 
-    return updatedProduct;
+  async update(id, productData) {
+    const product = await Product.findByPk(id);
+    if (!product) {
+      throw new Error("Product not found");
+    }
+    await product.update(productData);
+    return product;
+  }
+
+  async delete(id) {
+    const product = await Product.findByPk(id);
+    if (!product) {
+      throw new Error("Product not found");
+    }
+    await product.destroy();
+    return product;
   }
 }
 

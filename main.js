@@ -68,10 +68,18 @@ const itemHandler = new ItemHandler(itemService);
 const authHandler = new AuthHandler(authService);
 
 // Route untuk User
-app.get("/users", (req, res) => userHandler.getAll(req, res));
-app.get("/users/:email", (req, res) => userHandler.getByEmail(req, res));
-app.post("/register", (req, res) => authHandler.register(req, res));
-app.post("/login", (req, res) => authHandler.login(req, res));
+app.get("/users", (req, res) => {
+  userHandler.getAllUsers(req, res);
+});
+app.get("/users/:email", (req, res) => {
+  userHandler.getUserByEmail(req, res);
+});
+app.post("/register", (req, res) => {
+  authHandler.register(req, res); 
+});
+app.post("/login", (req, res) => {
+  authHandler.login(req, res); 
+});
 
 // Route untuk Product
 app.get("/products", (req, res) => productHandler.getAll(req, res));
