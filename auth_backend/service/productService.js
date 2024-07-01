@@ -6,28 +6,28 @@ class ProductService {
   }
 
   async getAllProducts() {
-    const products = await this.productRepository.getAll();
-    return products;
+    return await this.productRepository.findAll();
+  }
+
+  async createProduct(product) {
+    return await this.productRepository.createProduct(product);
   }
 
   async getProductById(id) {
-    const product = await this.productRepository.getById(id);
-    return product;
+    return await this.productRepository.getProductById(id);
   }
 
-  async createProduct(productData) {
-    const newProduct = await this.productRepository.create(productData);
-    return newProduct;
-  }
-
-  async updateProduct(id, productData) {
-    const updatedProduct = await this.productRepository.update(id, productData);
-    return updatedProduct;
+  async updateProduct(id, name, description, price) {
+    return await this.productRepository.updateProduct(
+      id,
+      name,
+      description,
+      price
+    );
   }
 
   async deleteProduct(id) {
-    const deletedProduct = await this.productRepository.delete(id);
-    return deletedProduct;
+    return await this.productRepository.deleteProduct(id);
   }
 }
 

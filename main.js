@@ -68,26 +68,20 @@ const itemHandler = new ItemHandler(itemService);
 const authHandler = new AuthHandler(authService);
 
 // Route untuk User
-app.get("/users", (req, res) => {
-  userHandler.getAllUsers(req, res);
-});
-app.post("/users", (req, res) => {
-  userHandler.createUser(req, res);
-});
-app.get("/users/:email", (req, res) => {
-  userHandler.getUserByEmail(req, res);
-});
-app.put("/users/:id", (req, res) => {
-  userHandler.updateUser(req, res);
-});
-app.delete("/users/:id", (req, res) => {
-  userHandler.deleteUser(req, res);
-});
+app.get("/users", (req, res) => userHandler.getAllUsers(req, res));
+app.post("/users", (req, res) => userHandler.createUser(req, res));
+app.get("/users/:email", (req, res) => userHandler.getUserByEmail(req, res));
+app.put("/users/:id", (req, res) => userHandler.updateUser(req, res));
+app.delete("/users/:id", (req, res) => userHandler.deleteUser(req, res));
 
 // Route untuk Product
-app.get("/products", (req, res) => productHandler.getAll(req, res));
-app.post("/products", (req, res) => productHandler.create(req, res));
-app.put("/products/:id", (req, res) => productHandler.updateById(req, res));
+app.get("/products", (req, res) => productHandler.getAllProducts(req, res));
+app.post("/products", (req, res) => productHandler.createProduct(req, res));
+app.get("/products/:id", (req, res) => productHandler.getProductById(req, res));
+app.put("/products/:id", (req, res) => productHandler.updateProduct(req, res));
+app.delete("/products/:id", (req, res) =>
+  productHandler.deleteProduct(req, res)
+);
 
 // Route untuk Category
 app.get("/categories", (req, res) => categoryHandler.getAll(req, res));
