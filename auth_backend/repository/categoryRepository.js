@@ -1,65 +1,37 @@
-const { category } = require('../../models/category')
+const { Category } = require("../../models/category");
 
 class CategoryRepository {
-  constructor() {}
-
-  async getAll() {
-    const getCategories = await pgConn.query(`
-      SELECT id, name, description
-      FROM categories
-    `);
-    return getCategories.rows;
+  constructor() {
+    this.Category = Category;
   }
 
-  async getById(id) {
-    const getCategory = await pgConn.query(
-      `
-      SELECT id, name, description
-      FROM categories
-      WHERE id = $1
-    `,
-      [id]
-    );
-    return getCategory.rows[0];
+  async getAllCategories() {
+    return await this.Category.findAll();
   }
 
-  async insert(category) {
-    const { name, description } = category;
-    const createdCategory = await pgConn.query(
-      `
-      INSERT INTO categories (name, description)
-      VALUES ($1, $2)
-      RETURNING *
-    `,
-      [name, description]
-    );
-    return createdCategory.rows[0];
+  async getCategoryById(id) {
+    return await this.Category.findByPk(id);
   }
 
-  async updateById(id, updates) {
-    const { name, description } = updates;
-    const updatedCategory = await pgConn.query(
-      `
-      UPDATE categories
-      SET name = $1, description = $2
-      WHERE id = $3
-      RETURNING *
-    `,
-      [name, description, id]
-    );
-    return updatedCategory.rows[0];
+  async createCategory(categoryData) {
+    return await this.Category.create(categoryData);
   }
 
-  async deleteById(id) {
-    const deletedCategory = await pgConn.query(
-      `
-      DELETE FROM categories
-      WHERE id = $1
-      RETURNING *
-    `,
-      [id]
-    );
-    return deletedCategory.rows[0];
+  async updateCategory(id, categoryData) {
+    const category = await this.Category.findByPk(id);
+    if (!category) {
+      throw new Error("Category not found");
+    }
+    return await category.update(categoryData);
+  }
+
+  async deleteCategory(id) {
+    const category = await this.Category.findByPk(id);
+    if (!category) {
+      throw new Error("Category not found");
+    }
+    await category.destroy();
+    return true;
   }
 }
 

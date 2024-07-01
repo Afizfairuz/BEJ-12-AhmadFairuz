@@ -1,4 +1,4 @@
-// categoryService.js
+const CategoryRepository = require("../repository/CategoryRepository");
 
 class CategoryService {
   constructor(categoryRepository) {
@@ -6,29 +6,43 @@ class CategoryService {
   }
 
   async getAllCategories() {
-    return this.categoryRepository.getAll();
+    try {
+      return await this.categoryRepository.getAllCategories();
+    } catch (error) {
+      throw new Error(`Failed to fetch categories: ${error.message}`);
+    }
   }
 
   async getCategoryById(id) {
-    return this.categoryRepository.getById(id);
+    try {
+      return await this.categoryRepository.getCategoryById(id);
+    } catch (error) {
+      throw new Error(`Failed to fetch category: ${error.message}`);
+    }
   }
 
-  async createCategory(name) {
-    const newCategory = {
-      name: name,
-    };
-    return this.categoryRepository.insert(newCategory);
+  async createCategory(categoryData) {
+    try {
+      return await this.categoryRepository.createCategory(categoryData);
+    } catch (error) {
+      throw new Error(`Failed to create category: ${error.message}`);
+    }
   }
 
-  async updateCategoryById(id, name) {
-    const updates = {
-      name: name,
-    };
-    return this.categoryRepository.updateById(id, updates);
+  async updateCategory(id, categoryData) {
+    try {
+      return await this.categoryRepository.updateCategory(id, categoryData);
+    } catch (error) {
+      throw new Error(`Failed to update category: ${error.message}`);
+    }
   }
 
-  async deleteCategoryById(id) {
-    return this.categoryRepository.deleteById(id);
+  async deleteCategory(id) {
+    try {
+      return await this.categoryRepository.deleteCategory(id);
+    } catch (error) {
+      throw new Error(`Failed to delete category: ${error.message}`);
+    }
   }
 }
 

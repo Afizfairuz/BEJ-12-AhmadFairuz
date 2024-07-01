@@ -1,33 +1,48 @@
 const OrderRepository = require("../repository/OrderRepository");
 
 class OrderService {
-  constructor() {
-    this.orderRepository = new OrderRepository();
+  constructor(orderRepository) {
+    this.orderRepository = orderRepository;
   }
 
   async getAllOrders() {
-    const orders = await this.orderRepository.getAll();
-    return orders;
+    try {
+      return await this.orderRepository.getAllOrders();
+    } catch (error) {
+      throw new Error(`Failed to fetch orders: ${error.message}`);
+    }
   }
 
   async getOrderById(id) {
-    const order = await this.orderRepository.getById(id);
-    return order;
+    try {
+      return await this.orderRepository.getOrderById(id);
+    } catch (error) {
+      throw new Error(`Failed to fetch order: ${error.message}`);
+    }
   }
 
   async createOrder(orderData) {
-    const newOrder = await this.orderRepository.create(orderData);
-    return newOrder;
+    try {
+      return await this.orderRepository.createOrder(orderData);
+    } catch (error) {
+      throw new Error(`Failed to create order: ${error.message}`);
+    }
   }
 
   async updateOrder(id, orderData) {
-    const updatedOrder = await this.orderRepository.update(id, orderData);
-    return updatedOrder;
+    try {
+      return await this.orderRepository.updateOrder(id, orderData);
+    } catch (error) {
+      throw new Error(`Failed to update order: ${error.message}`);
+    }
   }
 
   async deleteOrder(id) {
-    const deletedOrder = await this.orderRepository.delete(id);
-    return deletedOrder;
+    try {
+      return await this.orderRepository.deleteOrder(id);
+    } catch (error) {
+      throw new Error(`Failed to delete order: ${error.message}`);
+    }
   }
 }
 

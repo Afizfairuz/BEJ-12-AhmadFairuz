@@ -1,49 +1,37 @@
-const { Item } = require('../../models/item')
+const { Item } = require("../../models/item");
 
 class ItemRepository {
-  constructor() {}
-
-  async getAll() {
-    const getItems =
-      await pgConn`SELECT id, name, description, price, stock FROM items`;
-    return getItems;
+  constructor() {
+    this.Item = Item;
   }
 
-  async getById(id) {
-    const getItem = await pgConn`
-      SELECT id, name, description, price, stock
-      FROM items
-      WHERE id = ${id}`;
-    return getItem;
+  async getAllItems() {
+    return await this.Item.findAll();
   }
 
-  async insert(item) {
-    console.log("Data yang akan disimpan:", item);
-    const createdItem = await pgConn`
-      INSERT INTO items (name, description, price, stock)
-      VALUES (${item.name}, ${item.description}, ${item.price}, ${item.stock})
-      RETURNING *`;
-
-    return createdItem;
+  async getItemById(id) {
+    return await this.Item.findByPk(id);
   }
 
-  async updateById(id, updates) {
-    const updatedItem = await pgConn`
-      UPDATE items
-      SET name = ${updates.name}, description = ${updates.description}, price = ${updates.price}, stock = ${updates.stock}
-      WHERE id = ${id}
-      RETURNING *`;
-
-    return updatedItem;
+  async createItem(itemData) {
+    return await this.Item.create(itemData);
   }
 
-  async deleteById(id) {
-    const deletedItem = await pgConn`
-      DELETE FROM items
-      WHERE id = ${id}
-      RETURNING *`;
+  async updateItem(id, itemData) {
+    const item = await this.Item.findByPk(id);
+    if (!item) {
+      throw new Error("Item not found");
+    }
+    return await item.update(itemData);
+  }
 
-    return deletedItem;
+  async deleteItem(id) {
+    const item = await this.Item.findByPk(id);
+    if (!item) {
+      throw new Error("Item not found");
+    }
+    await item.destroy();
+    return true;
   }
 }
 

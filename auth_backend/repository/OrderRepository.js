@@ -1,37 +1,37 @@
-const pgConn = require("../config/postgres");
+const { Order } = require("../../models/order");
 
 class OrderRepository {
-  async getAll() {
-    const orderList = await Order.findAll();
-    return orderList;
+  constructor() {
+    this.Order = Order;
   }
 
-  async getById(id) {
-    const order = await Order.findByPk(id);
-    return order;
+  async getAllOrders() {
+    return await this.Order.findAll();
   }
 
-  async create(orderData) {
-    const newOrder = await Order.create(orderData);
-    return newOrder;
+  async getOrderById(id) {
+    return await this.Order.findByPk(id);
   }
 
-  async update(id, orderData) {
-    const order = await Order.findByPk(id);
+  async createOrder(orderData) {
+    return await this.Order.create(orderData);
+  }
+
+  async updateOrder(id, orderData) {
+    const order = await this.Order.findByPk(id);
     if (!order) {
       throw new Error("Order not found");
     }
-    await order.update(orderData);
-    return order;
+    return await order.update(orderData);
   }
 
-  async delete(id) {
-    const order = await Order.findByPk(id);
+  async deleteOrder(id) {
+    const order = await this.Order.findByPk(id);
     if (!order) {
       throw new Error("Order not found");
     }
     await order.destroy();
-    return order;
+    return true;
   }
 }
 

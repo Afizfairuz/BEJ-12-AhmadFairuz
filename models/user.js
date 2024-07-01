@@ -1,5 +1,3 @@
-"use strict";
-
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../auth_backend/config/postgres");
 
