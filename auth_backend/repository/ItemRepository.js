@@ -1,37 +1,33 @@
-const { Item } = require("../../models/item");
+const Item = require("../../models/item");
 
 class ItemRepository {
-  constructor() {
-    this.Item = Item;
-  }
-
   async getAllItems() {
-    return await this.Item.findAll();
+    return await Item.findAll();
   }
 
   async getItemById(id) {
-    return await this.Item.findByPk(id);
+    return await Item.findByPk(id);
   }
 
   async createItem(itemData) {
-    return await this.Item.create(itemData);
+    return await Item.create(itemData);
   }
 
   async updateItem(id, itemData) {
-    const item = await this.Item.findByPk(id);
-    if (!item) {
-      throw new Error("Item not found");
+    const item = await Item.findByPk(id);
+    if (item) {
+      return await item.update(itemData);
     }
-    return await item.update(itemData);
+    return null;
   }
 
   async deleteItem(id) {
-    const item = await this.Item.findByPk(id);
-    if (!item) {
-      throw new Error("Item not found");
+    const item = await Item.findByPk(id);
+    if (item) {
+      await item.destroy();
+      return true;
     }
-    await item.destroy();
-    return true;
+    return false;
   }
 }
 

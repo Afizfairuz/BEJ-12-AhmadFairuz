@@ -1,8 +1,8 @@
 const ItemService = require("../service/itemService");
 
 class ItemHandler {
-  constructor(itemService) {
-    this.itemService = itemService;
+  constructor() {
+    this.itemService = new ItemService();
   }
 
   async getAll(req, res) {
