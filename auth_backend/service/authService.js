@@ -1,4 +1,4 @@
-const UserRepository = require('../repository/UserRepository');
+const UserRepository = require("../repository/UserRepository");
 
 class AuthService {
   constructor() {
@@ -11,7 +11,7 @@ class AuthService {
   }
 
   async login(email, password) {
-    const user = await this.userRepository.getByEmail(email);
+    const user = await this.userRepository.getUserByEmail(email);
 
     if (!user) {
       throw new Error("User not found");

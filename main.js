@@ -111,6 +111,19 @@ app.get("/images/binar.png", (req, res) => {
   res.sendFile(path.join(__dirname, "assets", "binar.png"));
 });
 
+//Endpoint login
+app.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await authService.login(email, password);
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ message: error.message});
+  }
+});
+
+
+
 // Menjalankan server
 app.listen(PORT, () => {
   console.log(`Server berjalan pada http://localhost:${PORT}`);
