@@ -1,4 +1,7 @@
 const OrderService = require("../service/orderService");
+const orderService = new OrderService(
+  new (require("../repository/OrderRepository"))()
+);
 
 class OrderHandler {
   constructor(orderService) {
