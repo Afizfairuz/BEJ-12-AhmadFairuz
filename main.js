@@ -122,6 +122,15 @@ app.post('/login', async (req, res) => {
   }
 });
 
+//Endpoint Register
+app.post('/register', async (req, res) => {
+  try {
+    const newUser = await authService.register(req.body);
+    res.json(newUser);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
 
 // Menjalankan server

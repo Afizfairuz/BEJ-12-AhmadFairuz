@@ -6,7 +6,7 @@ class AuthService {
   }
 
   async register(user) {
-    const newUser = await this.userRepository.insert(user);
+    const newUser = await this.userRepository.createUser(user);
     return newUser;
   }
 
