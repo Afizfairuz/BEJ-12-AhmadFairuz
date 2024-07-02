@@ -1,37 +1,33 @@
-const { Category } = require("../../models/category");
+const Category = require("../../models/category");
 
 class CategoryRepository {
-  constructor() {
-    this.Category = Category;
-  }
-
   async getAllCategories() {
-    return await this.Category.findAll();
+    return await Category.findAll();
   }
 
   async getCategoryById(id) {
-    return await this.Category.findByPk(id);
+    return await Category.findByPk(id);
   }
 
   async createCategory(categoryData) {
-    return await this.Category.create(categoryData);
+    return await Category.create(categoryData);
   }
 
   async updateCategory(id, categoryData) {
-    const category = await this.Category.findByPk(id);
-    if (!category) {
-      throw new Error("Category not found");
+    const category = await Category.findByPk(id);
+    if (category) {
+      return await category.update(categoryData);
     }
-    return await category.update(categoryData);
+    return null;
   }
 
   async deleteCategory(id) {
-    const category = await this.Category.findByPk(id);
-    if (!category) {
-      throw new Error("Category not found");
+    const category = await Category.findByPk(id);
+    if (category) {
+      await category.destroy();
+      return true;
     }
-    await category.destroy();
-    return true;
+    return false;
   }
 }
 

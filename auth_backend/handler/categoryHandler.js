@@ -1,8 +1,8 @@
 const CategoryService = require("../service/categoryService");
 
 class CategoryHandler {
-  constructor(categoryService) {
-    this.categoryService = categoryService;
+  constructor() {
+    this.categoryService = new CategoryService();
   }
 
   async getAll(req, res) {
