@@ -112,7 +112,7 @@ app.get("/images/binar.png", (req, res) => {
 });
 
 //Endpoint login
-app.post('/login', async (req, res) => {
+app.post('/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await authService.login(email, password);
@@ -123,7 +123,7 @@ app.post('/login', async (req, res) => {
 });
 
 //Endpoint Register
-app.post('/register', async (req, res) => {
+app.post('/auth/register', async (req, res) => {
   try {
     const newUser = await authService.register(req.body);
     res.json(newUser);
